@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>门店销售数据</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-divider color="primary">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4 style="text-align:left">
+            <p>商品名称</p>
+          </ion-col>
+          <ion-col col-4 style="text-align:center">
+            <p>单价</p>
+          </ion-col>
+          <ion-col col-4 style="text-align:right">
+            <p>销量</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item-divider>
+    <button ion-item *ngFor="let game of games" (click)="doViewDetail(game)">
+      <ion-row>
+        <ion-col col-4 style="text-align:left">
+          <p>{{game.name}}</p></ion-col>
+        <ion-col col-4 style="text-align:center">
+          <p>{{game.price}}</p></ion-col>
+        <ion-col col-4 style="text-align:right">
+          <p>{{game.amount}}</p></ion-col>
+        </ion-row>
+    </button>
+  </ion-list>
+</ion-content>

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, ModalController, NavController } from 'ionic-angular';
 
-import { Item } from '../../models/item';
-import { Items } from '../../providers/providers';
+import { Activity } from '../../models/activity';
+import { Activities } from '../../providers/providers';
 
 @IonicPage()
 @Component({
@@ -10,10 +10,10 @@ import { Items } from '../../providers/providers';
   templateUrl: 'list-master.html'
 })
 export class ListMasterPage {
-  currentItems: Item[];
+  currentActivties: Activity[];
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
-    this.currentItems = this.items.query();
+  constructor(public navCtrl: NavController, public activities: Activities, public modalCtrl: ModalController) {
+    this.currentActivties = this.activities.query();
   }
 
   /**
@@ -30,7 +30,7 @@ export class ListMasterPage {
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
-        this.items.add(item);
+        this.activities.add(item);
       }
     })
     addModal.present();
@@ -39,16 +39,16 @@ export class ListMasterPage {
   /**
    * Delete an item from the list of items.
    */
-  deleteItem(item) {
-    this.items.delete(item);
+  deleteItem(activity) {
+    this.activities.delete(activity);
   }
 
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(item: Item) {
+  openItem(activity: Activity) {
     this.navCtrl.push('ItemDetailPage', {
-      item: item
+      activity: Activity
     });
   }
 }

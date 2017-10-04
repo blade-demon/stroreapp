@@ -42,8 +42,9 @@ export class MyApp {
     { title: 'Map', component: 'MapPage' },
     { title: 'Master Detail', component: 'ListMasterPage' },
     { title: 'Menu', component: 'MenuPage' },
-    { title: 'Settings', component: 'SettingsPage' },
-    { title: 'Search', component: 'SearchPage' }
+    { title: '活动', component: 'ActivitiesPage' },
+    { title: '销售', component: 'SalesPage' },
+    { title: '销售单品', component:'SalesItemPage'}
   ]
 
   constructor(private translate: TranslateService, private platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {

@@ -14,9 +14,9 @@ export class LoginPage {
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
-  account: { email: string, password: string } = {
-    email: 'test@example.com',
-    password: 'test'
+  account: { username: string, password: string } = {
+    username: 'gamepoch',
+    password: 'gamepoch'
   };
 
   // Our translated text strings
@@ -27,9 +27,10 @@ export class LoginPage {
     public toastCtrl: ToastController,
     public translateService: TranslateService) {
 
-    this.translateService.get('LOGIN_ERROR').subscribe((value) => {
-      this.loginErrorString = value;
-    })
+      this.loginErrorString = "登录失败，请检查用户名和密码后重试！";
+    // this.translateService.get('LOGIN_ERROR').subscribe((value) => {
+    //   this.loginErrorString = value;
+    // })
   }
 
   // Attempt to login in through our User service
@@ -37,12 +38,10 @@ export class LoginPage {
     this.user.login(this.account).subscribe((resp) => {
       this.navCtrl.push(MainPage);
     }, (err) => {
-      this.navCtrl.push(MainPage);
-      // Unable to log in
       let toast = this.toastCtrl.create({
         message: this.loginErrorString,
         duration: 3000,
-        position: 'top'
+        position: 'bottom'
       });
       toast.present();
     });

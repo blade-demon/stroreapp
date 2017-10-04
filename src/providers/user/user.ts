@@ -37,16 +37,20 @@ export class User {
    * the user entered on the form.
    */
   login(accountInfo: any) {
-    let seq = this.api.post('login', accountInfo).share();
+    let seq = this.api.get('users/0.json').share();
 
     seq
       .map(res => res.json())
       .subscribe(res => {
+        console.log("返回信息：", res);
+        this._loggedIn("");
         // If the API returned a successful response, mark the user as logged in
-        if (res.status == 'success') {
-          this._loggedIn(res);
-        } else {
-        }
+        // if (res.status == 'success') {
+        //   this._loggedIn(res);
+        // } else {
+        //   // fake login success
+        //   this._loggedIn(res);
+        // }
       }, err => {
         console.error('ERROR', err);
       });

@@ -3,11 +3,22 @@
   <div class="splash-info">
     <div class="splash-logo"></div>
     <div class="splash-intro">
-      {{ 'WELCOME_INTRO' | translate }}
+      {{ 'Gamepoch星游纪门店信息' }}
     </div>
   </div>
   <div padding>
-    <button ion-button block (click)="signup()">{{ 'SIGNUP' | translate }}</button>
-    <button ion-button block (click)="login()" class="login">{{ 'LOGIN' | translate }}</button>
+    <!-- <button ion-button block (click)="signup()">{{ }}</button> -->
+    <ion-list>
+      <ion-item>
+        <ion-label>选择门店</ion-label>
+        <ion-select>
+          <ion-option value="store1" selected>上海环球港店</ion-option>
+          <ion-option value="store2">浙江义务店</ion-option>
+          <ion-option value="store3">珠海天虹店</ion-option>
+          <ion-option value="store4">北京五棵松店</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <button default ion-button block (click)="login()" color="secondary">{{ "登录" }}</button>
   </div>
 </ion-content>

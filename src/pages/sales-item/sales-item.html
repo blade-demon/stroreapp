@@ -1,0 +1,38 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{salesItem.name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <img src="{{salesItem.headimg}}" alt="商品图片">
+
+  <!-- 增加记录 -->
+  <ion-fab top right edge>
+    <button ion-fab color="primary" (click)="doCreateNewItem()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+
+  <ion-list>
+    <ion-item>
+      <ion-row>
+        <ion-col col-6 style="text-align:left">日期</ion-col>
+        <ion-col col-2>销售</ion-col>
+        <ion-col col-2>购买</ion-col>
+        <ion-col col-2>库存</ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item *ngFor="let sales of salesArray">
+      <ion-row>
+        <ion-col col-6>
+          {{sales.date}}
+        </ion-col>
+        <ion-col col-2>{{sales.sold}}</ion-col>
+        <ion-col col-2>{{sales.purchase}}</ion-col>
+        <ion-col col-2>{{sales.inStock}}</ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-list>
+</ion-content>

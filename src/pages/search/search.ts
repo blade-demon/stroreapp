@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Item } from '../../models/item';
-import { Items } from '../../providers/providers';
+import { Activity } from '../../models/activity';
+import { Activities } from '../../providers/providers';
 
 @IonicPage()
 @Component({
@@ -13,7 +13,7 @@ export class SearchPage {
 
   currentItems: any = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public items: Items) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public activities: Activities) { }
 
   /**
    * Perform a service for the proper items.
@@ -24,7 +24,7 @@ export class SearchPage {
       this.currentItems = [];
       return;
     }
-    this.currentItems = this.items.query({
+    this.currentItems = this.activities.query({
       name: val
     });
   }
@@ -32,9 +32,9 @@ export class SearchPage {
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(item: Item) {
+  openItem(activity: Activity) {
     this.navCtrl.push('ItemDetailPage', {
-      item: item
+      activity: activity
     });
   }
 

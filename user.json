@@ -1,0 +1,23 @@
+{
+  "users": [{
+    "store": "上海环球港店",
+    "storeId":"1",
+    "username": "store1",
+    "password": "store1"
+  }, {
+    "store": "上海外滩店",
+    "storeId":"2",
+    "username": "store2",
+    "password": "store2"
+  }, {
+    "store": "浙江义乌店",
+    "storeId":"3",
+    "username": "store3",
+    "password": "store3"
+  }, {
+    "store": "北京五棵松店",
+    "storeId":"4",
+    "username": "store4",
+    "password": "store4"
+  }]
+}

@@ -3,24 +3,24 @@ import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Item } from '../../models/item';
+import { Activity } from '../../models/activity';
 import { Api } from '../api/api';
 
 @Injectable()
-export class Items {
+export class Activities {
 
   constructor(public http: Http, public api: Api) {
   }
 
   query(params?: any) {
-    return this.api.get('/items', params)
+    return this.api.get('/activities.json', params)
       .map(resp => resp.json());
   }
 
-  add(item: Item) {
+  add(activity: Activity) {
   }
 
-  delete(item: Item) {
+  delete(activity: Activity) {
   }
 
 }
