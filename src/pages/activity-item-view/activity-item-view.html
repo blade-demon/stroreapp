@@ -4,6 +4,9 @@
     </ion-navbar>
 </ion-header>
 <ion-content>
+    <ion-fab top right edge *ngIf="activityItem.status !== '已结束'">
+        <button ion-fab color="vibrant" (click)="doOpenEditPage()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
     <ion-list>
         <ion-item>
             <img src="{{activityItem.image}}" alt="">

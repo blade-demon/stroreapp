@@ -17,7 +17,7 @@
                         <!-- <ion-icon ios="ios-flag" md="md-flag"></ion-icon> -->
                         <p>名称</p>
                     </ion-col>
-                    <ion-col col-3 style="text-align:center">
+                    <ion-col col-3 style="text-align:right">
                         <!-- <ion-icon ios="ios-pulse" md="md-pulse"></ion-icon> -->
                         <p>状态</p>
                     </ion-col>
@@ -36,11 +36,10 @@
                 <ion-col col-4 style="text-align:center">
                     <p>{{activity.name}}</p>
                 </ion-col>
-                <ion-col col-3 style="text-align:center">
+                <ion-col col-3 style="text-align:right">
                     <p>{{activity.status}}</p>
                 </ion-col>
                 <ion-col col-2 style="text-align:right">
-                    <ion-icon ios="ios-create" md="md-create" (click)="doEditDetail(activity)" [hidden]="activity.status === '已结束'"></ion-icon>
                     <ion-icon ios="ios-search" md="md-search" (click)="doViewDetail(activity)"></ion-icon>
                 </ion-col>
             </ion-row>

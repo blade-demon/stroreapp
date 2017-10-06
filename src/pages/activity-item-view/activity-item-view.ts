@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { ActivityItemEditPage } from '../activity-item-edit/activity-item-edit';
 @IonicPage()
 @Component({
   selector: 'page-activity-item-view',
@@ -15,6 +15,11 @@ export class ActivityItemViewPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ActivityItemViewPage');
+  }
+
+  doOpenEditPage() {
+    console.log("编辑界面");
+    this.navCtrl.push(ActivityItemEditPage, {item: this.activityItem});
   }
 
 }

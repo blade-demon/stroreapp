@@ -15,182 +15,207 @@
     </ion-segment>
 
     <div [ngSwitch]="selectedPage">
-        <ion-list *ngSwitchCase="'prepare'" no-lines>
-            <div class="picWrapper">
+        <ion-list *ngSwitchCase="'prepare'">
+            <ion-card>
                 <ion-item>
                     <ion-label><small>门头照片</small></ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
                         <ion-col col-6 *ngFor="let pic of storePics; let id = index">
-                            <ion-card class="block">
-                                <ion-icon name="trash" class="delete" (click)="doDelete('storePics' ,id)"></ion-icon>
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('storePics', id)"></ion-icon>
                                 <img [src]="pic" alt="图片" *ngIf="pic">
                             </ion-card>
                         </ion-col>
-                        <ion-col col-12 *ngIf="2 - storePics.length > 0" style="text-align:center">
-                            <button ion-button icon-left clear (click)="getImage('storePics')">
-                                <ion-icon name="camera"></ion-icon>
-                                拍照
+                        <ion-col col-12 *ngIf="2 - storePics.length > 0" style="text-align:center; padding: 0 16px">
+                            <button ion-button icon-left clear (click)="presentActionSheet('storePics')">
+                                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                                选择照片
                               </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-            </div>
-            <div class="picWrapper">
+            </ion-card>
+            <ion-card>
                 <ion-item>
                     <ion-label><small>货架照片</small></ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
                         <ion-col col-6 *ngFor="let pic of shelvesPics; let id = index">
-                            <ion-card class="block">
-                                <ion-icon name="trash" class="delete" (click)="doDelete('shelvesPics', id)"></ion-icon>
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('shelvesPics', id)"></ion-icon>
                                 <img [src]="pic" alt="图片" *ngIf="pic">
                             </ion-card>
                         </ion-col>
-                        <ion-col col-12 *ngIf="2 - shelvesPics.length > 0" style="text-align:center">
-                            <button ion-button icon-left clear (click)="getImage('shelvesPics')">
-                                <ion-icon name="camera"></ion-icon>
-                                拍照
+                        <ion-col col-12 *ngIf="2 - shelvesPics.length > 0" style="text-align:center; padding: 0 16px">
+                            <button ion-button icon-left clear (click)="presentActionSheet('shelvesPics')">
+                                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                                选择照片
                               </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-            </div>
-            <div class="picWrapper">
+            </ion-card>
+            <ion-card>
                 <ion-item>
                     <ion-label> <small>店面陈列展示照片</small></ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
                         <ion-col col-6 *ngFor="let pic of storeShowPics; let id = index">
-                            <ion-card class="block">
-                                <ion-icon name="trash" class="delete" (click)="doDelete('storeShowPics', id)"></ion-icon>
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('storeShowPics', id)"></ion-icon>
                                 <img [src]="pic" alt="图片" *ngIf="pic">
                             </ion-card>
                         </ion-col>
-                        <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center">
-                            <button ion-button icon-left clear (click)="getImage('storeShowPics')">
-                                <ion-icon name="camera"></ion-icon>
-                                拍照
+                        <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center; padding: 0 16px">
+                            <button ion-button icon-left clear (click)="presentActionSheet('storeShowPics')">
+                                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                              选择照片
                               </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-            </div>
-            <button ion-button color="primary" full (click)="doSubmit()" [disabled]="!isReadyToSubmit">提交信息</button>
+            </ion-card>
+            <ion-row style="margin: 20px 0px">
+                <ion-col col-12 style="padding: 0 16px;">
+                    <button ion-button color="primary" full (click)="doSubmitPrepare()" [disabled]="!buttonPrepareState()">
+                        <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
+                        &nbsp;&nbsp;提交审核</button>
+                </ion-col>
+            </ion-row>
         </ion-list>
 
-        <ion-list *ngSwitchCase="'result'" no-lines>
+        <ion-list *ngSwitchCase="'result'">
             <ion-item>
                 <ion-label><small>参与人数</small></ion-label>
-                <ion-input dir="rtl" type="number"></ion-input>
+                <ion-input dir="rtl" type="number" placeholder="填写数字" min=1 [(ngModel)]="attend"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label><small>到场人数</small></ion-label>
-                <ion-input dir="rtl" type="number"></ion-input>
+                <ion-input dir="rtl" type="number" placeholder="填写数字" min=1 [(ngModel)]="join"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label><small>直播人数</small></ion-label>
-                <ion-input dir="rtl" type="number"></ion-input>
+                <ion-input dir="rtl" type="number" placeholder="填写数字" min=1 [(ngModel)]="live"></ion-input>
             </ion-item>
-            <ion-item>
-                <ion-label><small>选手照片</small></ion-label>
-            </ion-item>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-6 *ngFor="let pic of storeShowPics; let id = index">
-                        <ion-card class="block">
-                            <ion-icon name="trash" class="delete" (click)="doDelete('storeShowPics', id)"></ion-icon>
-                            <img [src]="pic" alt="图片" *ngIf="pic">
-                        </ion-card>
-                    </ion-col>
-                    <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center">
-                        <button ion-button icon-left clear (click)="getImage('storeShowPics')">
-                        <ion-icon name="camera"></ion-icon>
-                        拍照
+
+            <ion-card>
+                <ion-item>
+                    <ion-label><small>选手照片</small></ion-label>
+                </ion-item>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6 *ngFor="let pic of playersPics; let id = index">
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('playersPics', id)"></ion-icon>
+                                <img [src]="pic" alt="图片" *ngIf="pic">
+                            </ion-card>
+                        </ion-col>
+                        <ion-col col-12 *ngIf="2 - playersPics.length" style="text-align:center">
+                            <button ion-button icon-left clear (click)="presentActionSheet('playersPics')">
+                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                            选择照片
                       </button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <ion-item>
-                <ion-label><small>围观人照片</small></ion-label>
-            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
+            <ion-card>
+                <ion-item>
+                    <ion-label><small>围观人照片</small></ion-label>
+                </ion-item>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6 *ngFor="let pic of spectatorPics; let id = index">
+                            <ion-card class="block">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('spectatorPics', id)"></ion-icon>
+                                <img [src]="pic" alt="图片" *ngIf="pic">
+                            </ion-card>
+                        </ion-col>
+                        <ion-col col-12 *ngIf="2 - spectatorPics.length" style="text-align:center">
+                            <button ion-button icon-left clear (click)="presentActionSheet('spectatorPics')">
+                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                            选择照片
+                        </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
+            <ion-card>
+                <ion-item>
+                    <small>活动物料广告照片</small>
+                </ion-item>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6 *ngFor="let pic of advertisePics; let id = index">
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('advertisePics', id)"></ion-icon>
+                                <img [src]="pic" alt="图片" *ngIf="pic">
+                            </ion-card>
+                        </ion-col>
+                        <ion-col col-12 *ngIf="2 - advertisePics.length" style="text-align:center">
+                            <button ion-button icon-left clear (click)="presentActionSheet('advertisePics')">
+                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                            选择照片
+                        </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
+            <ion-card>
+                <ion-item>
+                    <small>直播大V照片</small>
+                </ion-item>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6 *ngFor="let pic of liverPics; let id = index">
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('liverPics', id)"></ion-icon>
+                                <img [src]="pic" alt="图片" *ngIf="pic">
+                            </ion-card>
+                        </ion-col>
+                        <ion-col col-12 *ngIf="2 - liverPics.length" style="text-align:center">
+                            <button ion-button icon-left clear (click)="presentActionSheet('liverPics')">
+                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                            选择照片
+                        </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
+            <ion-card>
+                <ion-item>
+                    <small>支持人照片</small>
+                </ion-item>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6 *ngFor="let pic of supporterPics; let id = index">
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('supporterPics', id)"></ion-icon>
+                                <img [src]="pic" alt="图片" *ngIf="pic">
+                            </ion-card>
+                        </ion-col>
+                        <ion-col col-12 *ngIf="2 - supporterPics.length" style="text-align:center">
+                            <button ion-button icon-left clear (click)="presentActionSheet('supporterPics')">
+                          <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                          选择照片
+                        </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
             <ion-grid>
                 <ion-row>
-                    <ion-col col-6 *ngFor="let pic of storeShowPics; let id = index">
-                        <ion-card class="block">
-                            <ion-icon name="trash" class="delete" (click)="doDelete('storeShowPics', id)"></ion-icon>
-                            <img [src]="pic" alt="图片" *ngIf="pic">
-                        </ion-card>
-                    </ion-col>
-                    <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center">
-                        <button ion-button icon-left clear (click)="getImage('storeShowPics')">
-                          <ion-icon name="camera"></ion-icon>
-                          拍照
-                        </button>
+                    <ion-col col-12>
+                        <button ion-button color="primary" full (click)="doSubmitResult()" [disabled]="!buttonResultState()">
+                          <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon>
+                      &nbsp;&nbsp;提交信息</button>
                     </ion-col>
                 </ion-row>
             </ion-grid>
-            <ion-item>
-                <small>活动物料广告照片</small>
-            </ion-item>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-6 *ngFor="let pic of storeShowPics; let id = index">
-                        <ion-card class="block">
-                            <ion-icon name="trash" class="delete" (click)="doDelete('storeShowPics', id)"></ion-icon>
-                            <img [src]="pic" alt="图片" *ngIf="pic">
-                        </ion-card>
-                    </ion-col>
-                    <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center">
-                        <button ion-button icon-left clear (click)="getImage('storeShowPics')">
-                          <ion-icon name="camera"></ion-icon>
-                          拍照
-                        </button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <ion-item>
-                <small>直播大V照片</small>
-            </ion-item>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-6 *ngFor="let pic of storeShowPics; let id = index">
-                        <ion-card class="block">
-                            <ion-icon name="trash" class="delete" (click)="doDelete('storeShowPics', id)"></ion-icon>
-                            <img [src]="pic" alt="图片" *ngIf="pic">
-                        </ion-card>
-                    </ion-col>
-                    <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center">
-                        <button ion-button icon-left clear (click)="getImage('storeShowPics')">
-                          <ion-icon name="camera"></ion-icon>
-                          拍照
-                        </button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <ion-item>
-                <small>支持人照片</small>
-            </ion-item>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-6 *ngFor="let pic of storeShowPics; let id = index">
-                        <ion-card class="block">
-                            <ion-icon name="trash" class="delete" (click)="doDelete('storeShowPics', id)"></ion-icon>
-                            <img [src]="pic" alt="图片" *ngIf="pic">
-                        </ion-card>
-                    </ion-col>
-                    <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center">
-                        <button ion-button icon-left clear (click)="getImage('storeShowPics')">
-                          <ion-icon name="camera"></ion-icon>
-                          拍照
-                        </button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <button ion-button color="primary" full (click)="doSubmit()" [disabled]="!isReadyToSubmit">提交信息</button>
         </ion-list>
     </div>
 </ion-content>

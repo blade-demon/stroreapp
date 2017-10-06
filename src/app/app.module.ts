@@ -9,6 +9,9 @@ import { IonicStorageModule, Storage } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { FileTransfer } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+import { ImagePicker } from '@ionic-native/image-picker';
 
 import { Activities } from '../mocks/providers/activities';
 import { Settings } from '../providers/providers';
@@ -20,6 +23,7 @@ import { SalesItemPage } from '../pages/sales-item/sales-item';
 import { SalesItemRecordCreatePage } from '../pages/sales-item-record-create/sales-item-record-create';
 import { ActivityItemViewPage } from '../pages/activity-item-view/activity-item-view';
 import { ActivityItemEditPage } from '../pages/activity-item-edit/activity-item-edit';
+import { ImgServiceProvider } from '../providers/img-service/img-service';
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function HttpLoaderFactory(http: Http) {
@@ -27,12 +31,6 @@ export function HttpLoaderFactory(http: Http) {
 }
 
 export function provideSettings(storage: Storage) {
-  /**
-   * The Settings provider takes a set of default settings for your app.
-   *
-   * You can add new settings options at any time. Once the settings are saved,
-   * these values will not overwrite the saved values (this can be done manually if desired).
-   */
   return new Settings(storage, {
     option1: true,
     option2: 'Ionitron J. Framework',
@@ -75,12 +73,16 @@ export function provideSettings(storage: Storage) {
     Activities,
     User,
     Camera,
+    File,
+    FileTransfer,
+    ImagePicker,
     GoogleMaps,
     SplashScreen,
     StatusBar,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    ImgServiceProvider
   ]
 })
 export class AppModule { }

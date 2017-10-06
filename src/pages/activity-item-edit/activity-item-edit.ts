@@ -1,117 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController } from 'ionic-angular';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { ImagePicker } from '@ionic-native/image-picker';
+import { ImgServiceProvider } from "../../providers/img-service/img-service";
 
+// import { azurestorage } from 'azure-storage';
 @IonicPage()
 @Component({
   selector: 'page-activity-item-edit',
   templateUrl: 'activity-item-edit.html',
 })
-// export class ActivityItemEditPage {
-//   @ViewChild('fileInputStorePics') fileInputStorePics;
-//   @ViewChild('fileInput') fileInput;
-//   isReadyToSave = false;
-
-//   activity: any;
-//   selectedPage: any;
-//   isReadyToSubmitPreapre: boolean;
-//   isReadyToSubmitResult: boolean;
-//   form_prepare: FormGroup;
-//   form_result: FormGroup;
-//   form: FormGroup;
-
-//   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera) {
-//     this.isReadyToSubmitPreapre = false;
-//     this.isReadyToSubmitResult = false;
-//     this.activity = this.navParams.get("item");
-//     // demo form
-//     this.form = formBuilder.group({
-//       profilePic: [''],
-//       name: ['', Validators.required],
-//       about: ['']
-//     });
-
-//     // Watch the form for changes, and
-//     this.form.valueChanges.subscribe((v) => {
-//       this.isReadyToSave = this.form.valid;
-//     });
-
-//     // 活动准备Form
-//     this.form_prepare = formBuilder.group({
-//       "storePics": ['', Validators.required],
-//       "shelvesPics": ['', Validators.required],
-//       "storeShowPics": ['', Validators.required]
-//     });
-
-//     // 结果上传Form
-//     this.form_result = formBuilder.group({
-//       "join": ['', Validators.required],
-//       "attend": ['', Validators.required],
-//       "live": ['', Validators.required],
-//       "playersPics": ['', Validators.required],
-//       "spectatorPics": ['', Validators.required],
-//       "advertisePics": ['', Validators.required],
-//       "liverPics": ['', Validators.required],
-//       "supporterPics": ['', Validators.required]
-//     });
-
-//     this.form_prepare.valueChanges.subscribe((v) => {
-//       this.isReadyToSubmitPreapre = this.form_prepare.valid;
-//     });
-
-//     this.form_result.valueChanges.subscribe((v) => {
-//       this.isReadyToSubmitResult = this.form_result.valid;
-//     });
-//   }
-
-//   ionViewDidLoad() {
-//     console.log('ionViewDidLoad ActivityItemEditPage');
-//   }
-
-//   getPicture() {
-//     if (Camera['installed']()) {
-//       this.camera.getPicture({
-//         destinationType: this.camera.DestinationType.DATA_URL,
-//         targetWidth: 96,
-//         targetHeight: 96
-//       }).then((data) => {
-//         console.log(data);
-//         this.form_prepare.patchValue({ 'storePics': 'data:image/jpg;base64,' + data });
-//       }, (err) => {
-//         alert('Unable to take photo');
-//       })
-//     } else {
-//       // this.fileInputStorePics.nativeElement.click();
-//       this.fileInput.nativeElement.click();
-//     }
-//   }
-
-//   processWebImage(event) {
-//     console.log(event.target.value);
-//     let reader = new FileReader();
-//     reader.onload = (readerEvent) => {
-//       let imageData = (readerEvent.target as any).result;
-//       console.log(imageData);
-//       this.form_prepare.patchValue({ 'storePics': imageData });
-//     };
-
-//     reader.readAsDataURL(event.target.storePics[0]);
-//   }
-
-//   getProfileImageStyle() {
-//     return 'url(' + this.form_prepare.controls['storePics'].value + ')'
-//   }
-
-// }
-
 
 export class ActivityItemEditPage {
-
   activity: any;
-  isReadyToSave: boolean;
-
   item: any;
   selectedPage: any;
 
@@ -120,56 +23,127 @@ export class ActivityItemEditPage {
   storePics: any;
   shelvesPics: any;
   storeShowPics: any;
+  // 活动结果
+  attend: number;
+  join: number;
+  live: any;
+  playersPics: any;
+  spectatorPics: any;
+  advertisePics: any;
+  liverPics: any;
+  supporterPics: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public camera: Camera, private alertCtrl: AlertController) {
+
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public viewCtrl: ViewController,
+    public actionSheetCtrl: ActionSheetController,
+    public camera: Camera,
+    private alertCtrl: AlertController,
+    private transfer: FileTransfer,
+    private file: File,
+    private imagePicker: ImagePicker,
+    private imgService: ImgServiceProvider
+  ) {
     this.activity = this.navParams.get("item");
     this.selectedPage = "prepare";
-    this.storePics = ['https://ionicframework.com/dist/preview-app/www/assets/img/nin-live.png', 'https://ionicframework.com/dist/preview-app/www/assets/img/badu-live.png'];
-    this.shelvesPics = ['https://ionicframework.com/dist/preview-app/www/assets/img/nin-live.png', 'https://ionicframework.com/dist/preview-app/www/assets/img/badu-live.png'];
-    this.storeShowPics = ['https://ionicframework.com/dist/preview-app/www/assets/img/nin-live.png', 'https://ionicframework.com/dist/preview-app/www/assets/img/badu-live.png'];
-  }
+    this.storePics = [];
+    this.shelvesPics = [];
+    this.storeShowPics = [];
 
-  ionViewDidLoad() {
-
+    this.attend = 0;
+    this.join = 0;
+    this.live = 0;
+    this.playersPics = [];
+    this.spectatorPics = [];
+    this.advertisePics = [];
+    this.liverPics = [];
+    this.supporterPics = [];
   }
 
   // 获取照片
-  getImage(imageArray) {
-    const options: CameraOptions = {
-      quality: 50,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    }
-    // 打开照相机
-    if (Camera['installed']()) {
-      this.camera.getPicture(options).then((imageData) => {
-        this.base64Image = "file://" + imageData;
-        switch (imageArray) {
-          case "storePics":
-            console.log("storePics");
-            this.storePics.push(this.base64Image);
-            this.storePics.reverse();
-            break;
-          case "shelvesPics":
-            console.log("shelvesPics");
-            this.shelvesPics.push(this.base64Image);
-            this.shelvesPics.reverse();
-            break;
-          case "storeShowPics":
-            console.log("storeShowPics");
-            this.storeShowPics.splice(this.base64Image);
-            this.storeShowPics.reverse();
-            break;
-        }
-      }, (err) => {
-        alert('Unable to take photo');
-      })
-    } else {
-      // 打开照相机
-      console.log("打开本地文件");
-      // this.fileInput.nativeElement.click();
-    }
+  getImageFromCamera(imageArray) {
+    this.imgService.openCamera().then((imageData) => {
+      this.base64Image = "data:image/jpeg;base64," + imageData;
+      switch (imageArray) {
+        case "storePics":
+          this.storePics.push(this.base64Image);
+          this.storePics.reverse();
+          break;
+        case "shelvesPics":
+          this.shelvesPics.push(this.base64Image);
+          this.shelvesPics.reverse();
+          break;
+        case "storeShowPics":
+          this.storeShowPics.push(this.base64Image);
+          this.storeShowPics.reverse();
+          break;
+
+        case "playersPics":
+          this.playersPics.push(this.base64Image);
+          this.playersPics.reverse();
+          break;
+        case "spectatorPics":
+          this.spectatorPics.push(this.base64Image);
+          this.spectatorPics.reverse();
+          break;
+        case "advertisePics":
+          this.advertisePics.push(this.base64Image);
+          this.advertisePics.reverse();
+          break;
+        case "liverPics":
+          this.liverPics.push(this.base64Image);
+          this.liverPics.reverse();
+          break;
+        case "supporterPics":
+          this.supporterPics.push(this.base64Image);
+          this.supporterPics.reverse();
+          break;
+      }
+    }, (err) => {
+      // this.showOpenCameraFailedAlert();
+    });
+  }
+
+  // 从相册获取照片
+  getImageFromImgPicker(imageArray) {
+    this.imgService.openImgPicker().then((imageFilesArray) => {
+      switch (imageArray) {
+        case "storePics":
+          this.storePics = this.storePics.concat(imageFilesArray);
+          this.storePics = this.storePics.reverse().slice(0, 2);
+          break;
+        case "shelvesPics":
+          this.shelvesPics = this.shelvesPics.concat(imageFilesArray);
+          this.shelvesPics = this.shelvesPics.reverse().slice(0, 2);
+          break;
+        case "storeShowPics":
+          this.storeShowPics = this.storeShowPics.concat(imageFilesArray);
+          this.storeShowPics = this.storeShowPics.reverse().slice(0, 2);
+          break;
+
+        case "playersPics":
+          this.playersPics = this.playersPics.concat(imageFilesArray);
+          this.playersPics = this.playersPics.reverse().slice(0, 2);
+          break;
+        case "spectatorPics":
+          this.spectatorPics = this.spectatorPics.concat(imageFilesArray);
+          this.spectatorPics = this.spectatorPics.reverse().slice(0, 2);
+          break;
+        case "advertisePics":
+          this.advertisePics = this.advertisePics.concat(imageFilesArray);
+          this.advertisePics = this.advertisePics.reverse().slice(0, 2);
+          break;
+        case "liverPics":
+          this.liverPics = this.liverPics.concat(imageFilesArray);
+          this.liverPics = this.liverPics.reverse().slice(0, 2);
+          break;
+        case "supporterPics":
+          this.supporterPics = this.supporterPics.concat(imageFilesArray);
+          this.supporterPics = this.supporterPics.reverse().slice(0, 2);
+          break;
+      }
+    });
   }
 
   // 删除照片
@@ -190,16 +164,29 @@ export class ActivityItemEditPage {
             handler: () => {
               switch (imageArray) {
                 case "storePics":
-                  console.log("storePics");
                   this.storePics.splice(index, 1);
                   break;
                 case "shelvesPics":
-                  console.log("shelvesPics");
                   this.shelvesPics.splice(index, 1);
                   break;
                 case "storeShowPics":
-                  console.log("storeShowPics");
                   this.storeShowPics.splice(index, 1);
+                  break;
+
+                case "playersPics":
+                  this.playersPics.splice(index, 1);
+                  break;
+                case "spectatorPics":
+                  this.spectatorPics.splice(index, 1);
+                  break;
+                case "advertisePics":
+                  this.advertisePics.splice(index, 1);
+                  break;
+                case "liverPics":
+                  this.liverPics.splice(index, 1);
+                  break;
+                case "supporterPics":
+                  this.supporterPics.splice(index, 1);
                   break;
               }
             }
@@ -207,5 +194,61 @@ export class ActivityItemEditPage {
         ]
       });
     confirm.present();
+  }
+
+  // 选择相册或者相机
+  presentActionSheet(imageArray) {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: '选择',
+      buttons: [
+        {
+          text: '打开相机',
+          role: 'destructive',
+          handler: () => {
+            console.log('打开相机');
+            this.getImageFromCamera(imageArray);
+          }
+        }, {
+          text: '打开相册',
+          handler: () => {
+            console.log('打开本地文件');
+            this.getImageFromImgPicker(imageArray);
+          }
+        }, {
+          text: '取消',
+          handler: () => {
+            console.log('取消');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  // 打开相机失败提示
+  showOpenCameraFailedAlert() {
+    let alert = this.alertCtrl.create({
+      subTitle: '没有找到相机',
+      buttons: ['确定']
+    });
+    alert.present();
+  }
+
+  //上传准备照片
+  doSubmitPrepare() {
+
+  }
+
+  // 上传活动结果
+  doSubmitResult() {
+
+  }
+
+  buttonPrepareState() {
+    return this.storePics.length && this.shelvesPics.length && this.storeShowPics.length;
+  }
+
+  buttonResultState() {
+    return this.attend && this.join && this.live && this.playersPics.length && this.spectatorPics.length && this.advertisePics.length && this.liverPics.length && this.supporterPics.length;
   }
 }
