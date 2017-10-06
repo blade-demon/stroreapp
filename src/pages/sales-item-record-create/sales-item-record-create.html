@@ -1,15 +1,18 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>创建新记录</ion-title>
-    <!-- <ion-buttons start>
-      <button ion-button (click)="cancel()">
+    <ion-navbar>
+        <ion-title>
+            <ion-icon ios="ios-create" md="md-create"></ion-icon>
+            创建新记录
+        </ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="onCancel()">
             <span color="primary" showWhen="ios">
               取消
             </span>
             <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
           </button>
-    </ion-buttons>
-    <ion-buttons end>
+        </ion-buttons>
+        <!-- <ion-buttons end>
       <button ion-button (click)="done()" [disabled]="!isReadyToSave" strong>
             <span color="primary" showWhen="ios">
               创建
@@ -17,33 +20,33 @@
             <ion-icon name="md-checkmark" showWhen="core,android,windows"></ion-icon>
           </button>
     </ion-buttons> -->
-  </ion-navbar>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <form [formGroup]="form" (ngSubmit)="createNewRecord()">
-      <ion-item>
-        <ion-label>日期</ion-label>
-        <ion-datetime displayFormat="YYYY-MM-DD" min="2017-10-01" max="2020" formControlName="date"></ion-datetime>
-      </ion-item>
-      <ion-item>
-        <ion-label>销售</ion-label>
-        <ion-input dir="rtl" type="number" formControlName="sold"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>进货量</ion-label>
-        <ion-input dir="rtl" type="number" formControlName="purchase"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>进货量价格</ion-label>
-        <ion-input dir="rtl" type="number" formControlName="purchasePrice"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>库存</ion-label>
-        <ion-input dir="rtl" type="number" formControlName="inStock"></ion-input>
-      </ion-item>
-      <button ion-button type="submit" color="primary" full [disabled]="!form.valid">提交</button>
-    </form>
-  </ion-list>
+    <ion-list>
+        <form [formGroup]="form" (ngSubmit)="createNewRecord()">
+            <ion-item>
+                <ion-label>日期</ion-label>
+                <ion-datetime displayFormat="YYYY-MM-DD" min="2017-10-01" max="2020" formControlName="date"></ion-datetime>
+            </ion-item>
+            <ion-item>
+                <ion-label>销售</ion-label>
+                <ion-input dir="rtl" type="number" formControlName="sold"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>进货量</ion-label>
+                <ion-input dir="rtl" type="number" formControlName="purchase"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>进货量价格</ion-label>
+                <ion-input dir="rtl" type="number" formControlName="purchasePrice"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>库存</ion-label>
+                <ion-input dir="rtl" type="number" formControlName="inStock"></ion-input>
+            </ion-item>
+            <button ion-button type="submit" color="primary" full [disabled]="!form.valid">提交</button>
+        </form>
+    </ion-list>
 </ion-content>

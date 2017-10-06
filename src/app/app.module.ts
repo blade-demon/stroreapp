@@ -18,7 +18,8 @@ import { MyApp } from './app.component';
 
 import { SalesItemPage } from '../pages/sales-item/sales-item';
 import { SalesItemRecordCreatePage } from '../pages/sales-item-record-create/sales-item-record-create';
-
+import { ActivityItemViewPage } from '../pages/activity-item-view/activity-item-view';
+import { ActivityItemEditPage } from '../pages/activity-item-edit/activity-item-edit';
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function HttpLoaderFactory(http: Http) {
@@ -44,7 +45,9 @@ export function provideSettings(storage: Storage) {
   declarations: [
     MyApp,
     SalesItemPage,
-    SalesItemRecordCreatePage
+    SalesItemRecordCreatePage,
+    ActivityItemViewPage,
+    ActivityItemEditPage
   ],
   imports: [
     BrowserModule,
@@ -63,7 +66,9 @@ export function provideSettings(storage: Storage) {
   entryComponents: [
     MyApp,
     SalesItemPage,
-    SalesItemRecordCreatePage
+    SalesItemRecordCreatePage,
+    ActivityItemViewPage,
+    ActivityItemEditPage
   ],
   providers: [
     Api,

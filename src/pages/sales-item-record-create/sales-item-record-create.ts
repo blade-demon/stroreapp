@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -13,7 +13,10 @@ export class SalesItemRecordCreatePage {
   newRecord: { date, sold, purchase, purchasePrice, inStock };
   private form: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder) {
+  constructor(public navCtrl: NavController,
+    public viewCtrl: ViewController,
+    public navParams: NavParams,
+    private formBuilder: FormBuilder) {
     this.form = formBuilder.group({
       date: ['', [Validators.required]],
       sold: ['', [Validators.required, Validators.min(0), Validators.max(99999999)]],
@@ -34,5 +37,9 @@ export class SalesItemRecordCreatePage {
 
   createNewRecord() {
     console.log("创建", this.form.value);
+  }
+
+  onCancel() {
+    this.viewCtrl.dismiss();
   }
 }

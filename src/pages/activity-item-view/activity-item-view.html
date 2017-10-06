@@ -1,0 +1,104 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{activityItem.name}}</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ion-item>
+            <img src="{{activityItem.image}}" alt="">
+        </ion-item>
+        <ion-item>
+            <small>活动时间：{{activityItem.date}}</small>
+        </ion-item>
+        <ion-item text-wrap>
+            <small>活动描述：{{activityItem.desc}}</small>
+        </ion-item>
+        <ion-item text-wrap>
+            <small>活动状态：{{activityItem.status}}</small>
+        </ion-item>
+    </ion-list>
+    <ion-list [hidden]="activityItem.status !== '已结束'">
+        <ion-list-header color="primary">
+            活动汇总材料
+        </ion-list-header>
+        <ion-item>
+            <small style="float:left">参与人数：{{activityItem.result.attend}}</small>
+        </ion-item>
+        <ion-item>
+            <small style="float:left">到场人数：{{activityItem.result.join}}</small>
+        </ion-item>
+        <ion-item>
+            <small style="float:left">直播人数：{{activityItem.result.live}}</small>
+        </ion-item>
+        <ion-item>
+            <small>选手照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.result.playersPics;">
+                <img src="{{pic}}" alt="选手照片">
+            </div>
+        </ion-item>
+        <ion-item>
+            <small>围观人群照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.result.spectatorPics">
+                <img src="{{pic}}" alt="围观人群照片">
+            </div>
+        </ion-item>
+        <ion-item>
+            <small>活动物料广告照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.result.advertisePics">
+                <img src="{{pic}}" alt="活动物料广告照片">
+            </div>
+        </ion-item>
+        <ion-item>
+            <small>直播大V照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.result.liverPics">
+                <img src="{{pic}}" alt="直播大V照片">
+            </div>
+        </ion-item>
+        <ion-item>
+            <small>支持人照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.result.supporterPics">
+                <img src="{{pic}}" alt="支持人照片">
+            </div>
+        </ion-item>
+    </ion-list>
+    <ion-list>
+        <ion-item color="primary">
+            活动准备材料
+        </ion-item>
+        <ion-item>
+            <small>门头照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.prepare.storePics">
+                <img src="{{pic}}" alt="门头照片">
+            </div>
+        </ion-item>
+        <ion-item>
+            <small>货架照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.prepare.shelvesPics">
+                <img src="{{pic}}" alt="货架照片">
+            </div>
+        </ion-item>
+        <ion-item>
+            <small>店面陈列展示照片</small>
+        </ion-item>
+        <ion-item>
+            <div *ngFor="let pic of activityItem.prepare.storeShowPics">
+                <img src="{{pic}}" alt="店面陈列展示照片">
+            </div>
+        </ion-item>
+    </ion-list>
+</ion-content>

@@ -8,7 +8,7 @@ import { Http, RequestOptions, URLSearchParams } from '@angular/http';
  */
 @Injectable()
 export class Api {
-  url: string = 'https://firstdata-61e0f.firebaseio.com';
+  url: string = 'https://ziweidemo.wilddogio.com';
 
   constructor(public http: Http) {
   }

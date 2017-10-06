@@ -1,24 +1,38 @@
 <ion-content scroll="false">
-  <div class="splash-bg"></div>
-  <div class="splash-info">
-    <div class="splash-logo"></div>
-    <div class="splash-intro">
-      {{ 'Gamepoch星游纪门店信息' }}
+    <div class="splash-bg"></div>
+    <div class="splash-info">
+        <div class="splash-logo"></div>
+        <div class="splash-intro">
+            {{ 'Gamepoch星游纪门店信息' }}
+        </div>
     </div>
-  </div>
-  <div padding>
-    <!-- <button ion-button block (click)="signup()">{{ }}</button> -->
-    <ion-list>
-      <ion-item>
-        <ion-label>选择门店</ion-label>
-        <ion-select>
-          <ion-option value="store1" selected>上海环球港店</ion-option>
-          <ion-option value="store2">浙江义务店</ion-option>
-          <ion-option value="store3">珠海天虹店</ion-option>
-          <ion-option value="store4">北京五棵松店</ion-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
-    <button default ion-button block (click)="login()" color="secondary">{{ "登录" }}</button>
-  </div>
+    <div padding>
+        <!-- <button ion-button block (click)="signup()">{{ }}</button> -->
+        <ion-list>
+            <ion-item>
+                <ion-label>选择门店</ion-label>
+                <ion-select>
+                    <ion-option value="store1" selected>上海环球港店</ion-option>
+                    <ion-option value="store2">浙江义务店</ion-option>
+                    <ion-option value="store3">珠海天虹店</ion-option>
+                    <ion-option value="store4">北京五棵松店</ion-option>
+                </ion-select>
+            </ion-item>
+        </ion-list>
+        <!-- <button default ion-button block (click)="login()" color="secondary">{{ "登录" }}</button> -->
+        <div style="text-align:center">
+            <button ion-button icon-end large clear (click)="login()">
+                继续<ion-icon name="arrow-forward"></ion-icon>
+              </button>
+        </div>
+    </div>
 </ion-content>
+
+<!-- <ion-footer>
+    <ion-toolbar>
+        <ion-row>
+            <p><img src="assets/img/icon32_wx_logo.png" alt="微信icon" style="vertical-align:middle"><span> Gamepoch星游纪</span></p>
+            <p><img src="assets/img/LOGO_32x32.png" alt="微信icon" style="vertical-align:middle"><span> Gamepoch星游纪</span></p>
+        </ion-row>
+    </ion-toolbar>
+</ion-footer> -->
