@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController, LoadingController, ToastController } from 'ionic-angular';
 import { ImgServiceProvider } from "../../providers/img-service/img-service";
 
-// import { azurestorage } from 'azure-storage';
+declare var AzureStorage: any;
+declare const Buffer;
+
 @IonicPage()
 @Component({
   selector: 'page-activity-item-edit',
@@ -10,6 +12,8 @@ import { ImgServiceProvider } from "../../providers/img-service/img-service";
 })
 
 export class ActivityItemEditPage {
+  public blobStorageService: any;
+
   activity: any;
   item: any;
   selectedPage: any;
@@ -35,6 +39,8 @@ export class ActivityItemEditPage {
     public viewCtrl: ViewController,
     public actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
     private imgService: ImgServiceProvider
   ) {
     this.activity = this.navParams.get("item");
@@ -51,7 +57,10 @@ export class ActivityItemEditPage {
     this.advertisePics = [];
     this.liverPics = [];
     this.supporterPics = [];
+    // Azure Blob Storage Init
+    this.blobStorageService = AzureStorage.createBlobService("DefaultEndpointsProtocol=https;AccountName=storeapp;AccountKey=cwzlYfEC+rSZRmt2ywr4GqVKytXsMvh/a6bIgH2zzlYLu5BLa2fvqMw1fHHkrEEugUlLlhBmik+GRQG4TpUtpQ==;EndpointSuffix=core.chinacloudapi.cn");
   }
+
 
   // 获取照片
   getImageFromCamera(imageArray) {
@@ -100,38 +109,42 @@ export class ActivityItemEditPage {
   // 从相册获取照片
   getImageFromImgPicker(imageArray) {
     this.imgService.openImgPicker().then((imageFilesArray) => {
+      let newImageFilesArray = [];
+      imageFilesArray.map(item => {
+        newImageFilesArray.push("data:image/jpeg;base64," + item);
+      });
       switch (imageArray) {
         case "storePics":
-          this.storePics = this.storePics.concat(imageFilesArray);
+          this.storePics = this.storePics.concat(newImageFilesArray);
           this.storePics = this.storePics.reverse().slice(0, 2);
           break;
         case "shelvesPics":
-          this.shelvesPics = this.shelvesPics.concat(imageFilesArray);
+          this.shelvesPics = this.shelvesPics.concat(newImageFilesArray);
           this.shelvesPics = this.shelvesPics.reverse().slice(0, 2);
           break;
         case "storeShowPics":
-          this.storeShowPics = this.storeShowPics.concat(imageFilesArray);
+          this.storeShowPics = this.storeShowPics.concat(newImageFilesArray);
           this.storeShowPics = this.storeShowPics.reverse().slice(0, 2);
           break;
 
         case "playersPics":
-          this.playersPics = this.playersPics.concat(imageFilesArray);
+          this.playersPics = this.playersPics.concat(newImageFilesArray);
           this.playersPics = this.playersPics.reverse().slice(0, 2);
           break;
         case "spectatorPics":
-          this.spectatorPics = this.spectatorPics.concat(imageFilesArray);
+          this.spectatorPics = this.spectatorPics.concat(newImageFilesArray);
           this.spectatorPics = this.spectatorPics.reverse().slice(0, 2);
           break;
         case "advertisePics":
-          this.advertisePics = this.advertisePics.concat(imageFilesArray);
+          this.advertisePics = this.advertisePics.concat(newImageFilesArray);
           this.advertisePics = this.advertisePics.reverse().slice(0, 2);
           break;
         case "liverPics":
-          this.liverPics = this.liverPics.concat(imageFilesArray);
+          this.liverPics = this.liverPics.concat(newImageFilesArray);
           this.liverPics = this.liverPics.reverse().slice(0, 2);
           break;
         case "supporterPics":
-          this.supporterPics = this.supporterPics.concat(imageFilesArray);
+          this.supporterPics = this.supporterPics.concat(newImageFilesArray);
           this.supporterPics = this.supporterPics.reverse().slice(0, 2);
           break;
       }
@@ -228,7 +241,29 @@ export class ActivityItemEditPage {
 
   //上传准备照片
   doSubmitPrepare() {
-    // this.imgService.uploadImg();
+    const loading = this.loadingCtrl.create({
+      content: '上传中...'
+    });
+    loading.present();
+
+    let fileArray = [];
+    var storePicsLength = this.storePics.length;
+    var shelvesPicsLength = this.shelvesPics.length;
+    var storeShowPicsLength = this.storeShowPics.length;
+    fileArray = fileArray.concat(this.storePics).concat(this.shelvesPics).concat(this.storeShowPics);
+    this.uploadImg(fileArray, [storePicsLength, shelvesPicsLength, storeShowPicsLength], function(err, result){
+      loading.dismiss();
+      if(!err) {
+        // alert(result);
+        let alert = this.alertCtrl.create({
+          subTitle: '图片上传成功！',
+          buttons: ['确定']
+        });
+        alert.present();
+      } else {
+        alert(err);
+      }
+    });
   }
 
   // 上传活动结果
@@ -242,5 +277,81 @@ export class ActivityItemEditPage {
 
   buttonResultState() {
     return this.attend && this.join && this.live && this.playersPics.length && this.spectatorPics.length && this.advertisePics.length && this.liverPics.length && this.supporterPics.length;
+  }
+
+  // 上传图片
+  uploadImg(files: any[], picLengthArray, callback) {
+    if (!files.length) {
+      return;
+    }
+
+    // 创建容器
+    this.createContainer("images", (error, result) => {
+      if (!error) {
+        // 上传Blob
+        this.uploadFiles("images", files, picLengthArray, function (error, result) {
+          if (!error) {
+            callback(null, "上传结果：" + result);
+          } else {
+            callback(error, "上传失败：" + error);
+          }
+        });
+      } else {
+        callback(error, "上传失败：" + error);
+      }
+    });
+  }
+
+  // 检查门店的container是否存在, 如果不存在就为门店创建一个容器
+  createContainer(container, cb) {
+    this.blobStorageService.createContainerIfNotExists(container, { publicAccessLevel: 'blob' }, function (error, result, response) {
+      if (!error) {
+        if (result) {
+          cb(null, "容器已经创建");
+        } else {
+          cb(null, "容器已存在");
+        }
+      } else {
+        cb(error, "出现错误");
+      }
+    });
+  }
+
+  // 上传文件
+  uploadFiles(containerName, files, picLengthArray, callback) {
+    var finished = 0;
+    var blobService = this.blobStorageService;
+    var imgCategory = "";
+    files.forEach(function (file, index) {
+      // var blobName = file.replace(/^.*[\\\/]/, '');
+      var fileInfo = [];
+      fileInfo = file.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      console.log(fileInfo);
+      var type = fileInfo[1];
+
+      if(index < picLengthArray[0]) {
+        imgCategory = "storePics";
+      }
+      if(picLengthArray[0] <= index < picLengthArray[0] + picLengthArray[1]) {
+        imgCategory = "shelvesPics";
+      }
+      if(picLengthArray[0] + picLengthArray[1] <= index < picLengthArray[0] + picLengthArray[1] + picLengthArray[2]) {
+        imgCategory = "storeShowPics";
+      }
+
+      var blobName = imgCategory + Date.now() + ".jpeg";
+      var fileBuffer = new Buffer(fileInfo[2], "base64");
+      console.log(fileBuffer);
+      blobService.createBlockBlobFromText(containerName, blobName, fileBuffer, {contentType: type}, function (error, result, response) {
+        finished++;
+        if (error) {
+          callback(error);
+        } else {
+          if (finished === files.length) {
+            callback(null, result);
+          }
+        }
+      });
+    });
   }
 }
