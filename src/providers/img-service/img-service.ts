@@ -1,37 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { ActionSheetController } from "ionic-angular";
 import { Camera, CameraOptions } from "@ionic-native/camera";
-import { FileTransfer, FileUploadOptions, FileUploadResult, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file';
 import { ImagePicker } from '@ionic-native/image-picker';
 
+declare var azuresorage;
 @Injectable()
 export class ImgServiceProvider {
 
-  upload: any = {
-    url: 'http://xxx/',           //接收图片的url
-    fileKey: 'image',  //接收图片时的key
-    headers: {
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' //不加入 发生错误！！
-    },
-    params: {},        //需要额外上传的参数
-    success: (data) => { }, //图片上传成功后的回调
-    error: (err) => { },   //图片上传失败后的回调
-    listen: () => { }   //监听上传过程
-  };
-
   constructor(public http: Http,
-    private actionSheetCtrl: ActionSheetController,
-    private fileTransfer: FileTransfer,
     private camera: Camera,
-    private imagePicker: ImagePicker) {
-    console.log('Hello ImgServiceProvider Provider');
+    private imagePicker: ImagePicker,
+    private blobService: any) {
+      azuresorage.createBlobService();
+      // this.blobService = AzureStorage.createBlobService();
   }
 
-  fileTransferObj: FileTransferObject = this.fileTransfer.create();
-
+  // https://storeapp.blob.core.chinacloudapi.cn/images/bjork-live.jpg
   // 打开相机
   openCamera() {
     let options: CameraOptions = {
@@ -44,8 +29,8 @@ export class ImgServiceProvider {
     }
     return this.camera.getPicture(options)
       .then(
-        (imageData) => Promise.resolve(imageData),
-        (err) => Promise.reject(`Unable to take photo ${err}`)
+      (imageData) => Promise.resolve(imageData),
+      (err) => Promise.reject(`Unable to take photo ${err}`)
       );
   }
 
@@ -59,8 +44,8 @@ export class ImgServiceProvider {
     };
     return this.imagePicker.getPictures(imagePickerOpt)
       .then(
-        (results) => Promise.resolve(results),
-        (err) => Promise.reject("无法从收集相册中选择图片"));
+      (results) => Promise.resolve(results),
+      (err) => Promise.reject("无法从收集相册中选择图片"));
   }
 
   // 上传图片
@@ -69,34 +54,51 @@ export class ImgServiceProvider {
       return;
     }
 
-    let options = {
-      fileKey: this.upload.fileKey,
-      headers: this.upload.headers,
-      params: this.upload.params
-    };
-
-    this.fileTransferObj.upload(path, this.upload.url, options)
-      .then((data) => {
-
-        if (this.upload.success) {
-          this.upload.success(JSON.parse(data.response));
-        }
-
-      }, (err) => {
-        if (this.upload.error) {
-          this.upload.error(err);
-        } else {
-          // this.noticeSer.showToast('错误：上传失败！');
-          alert("图片上传失败！");
-        }
-      });
+    this.createContainer("images", function (error, result) {
+      // this.uploadFile('images', 'testblob', 'package.json');
+      if(!error) {
+        alert("result: " + result + "正在上传文件" + path + "...");
+        // this.uploadFile("images", 'testblob', path, function(error, result){
+        //   if(!error) {
+        //     alert(result);
+        //   } else {
+        //     alert(error);
+        //   }
+        // });
+      } else {
+        alert(error);
+      }
+    });
   }
 
   // 停止上传
   stopUpload() {
-    if (this.fileTransfer) {
-      this.fileTransferObj.abort();
-    }
+
   }
 
+  // 检查门店的container是否存在, 如果不存在就为门店创建一个容器
+  createContainer(container, cb) {
+    this.blobService.createContainerIfNotExists(container, { publicAccessLevel: 'blob' }, function (error, result, response) {
+      if (!error) {
+        if (result) {
+          cb(null, "容器已经创建");
+        } else {
+          cb(null, "容器已存在");
+        }
+      } else {
+        cb(error, "出现错误");
+      }
+    });
+  }
+
+  // 上传文件
+  uploadFile(container, blob, filePath, cb) {
+    this.blobService.createBlockBlobFromLocalFile(container, blob, filePath, function (error, result, response) {
+      if (!error) {
+        cb(null, result.isSuccessful);
+      } else {
+        cb(error);
+      }
+    });
+  }
 }

@@ -1,9 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController } from 'ionic-angular';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file';
-import { ImagePicker } from '@ionic-native/image-picker';
 import { ImgServiceProvider } from "../../providers/img-service/img-service";
 
 // import { azurestorage } from 'azure-storage';
@@ -38,11 +34,7 @@ export class ActivityItemEditPage {
     public navParams: NavParams,
     public viewCtrl: ViewController,
     public actionSheetCtrl: ActionSheetController,
-    public camera: Camera,
     private alertCtrl: AlertController,
-    private transfer: FileTransfer,
-    private file: File,
-    private imagePicker: ImagePicker,
     private imgService: ImgServiceProvider
   ) {
     this.activity = this.navParams.get("item");
@@ -236,7 +228,7 @@ export class ActivityItemEditPage {
 
   //上传准备照片
   doSubmitPrepare() {
-
+    // this.imgService.uploadImg();
   }
 
   // 上传活动结果
