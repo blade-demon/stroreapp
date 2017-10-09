@@ -24,6 +24,8 @@ import { SalesItemRecordCreatePage } from '../pages/sales-item-record-create/sal
 import { ActivityItemViewPage } from '../pages/activity-item-view/activity-item-view';
 import { ActivityItemEditPage } from '../pages/activity-item-edit/activity-item-edit';
 import { ImgServiceProvider } from '../providers/img-service/img-service';
+import { ProductsProvider } from '../providers/products/products';
+import { StoresProvider } from '../providers/stores/stores';
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function HttpLoaderFactory(http: Http) {
@@ -82,7 +84,9 @@ export function provideSettings(storage: Storage) {
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    ImgServiceProvider
+    ImgServiceProvider,
+    ProductsProvider,
+    StoresProvider
   ]
 })
 export class AppModule { }

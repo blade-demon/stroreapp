@@ -1,15 +1,15 @@
-import 'rxjs/add/operator/map';
-
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 
-import { Activity } from '../../models/activity';
+import { Product } from "../../models/Product";
 import { Api } from '../api/api';
 
 @Injectable()
-export class Activities {
+export class ProductsProvider {
 
   constructor(public http: Http, public api: Api) {
+    // console.log('Hello ProductsProvider Provider');
   }
 
   query(params?: any) {
@@ -17,10 +17,11 @@ export class Activities {
       .map(resp => resp.json());
   }
 
-  add(activity: Activity) {
+  add(product: Product) {
+
   }
 
-  delete(activity: Activity) {
-  }
+  delete(product: Product) {
 
+  }
 }

@@ -37,7 +37,7 @@ export class User {
    * the user entered on the form.
    */
   login(accountInfo: any) {
-    let seq = this.api.get('users/0.json').share();
+    let seq = this.api.get('employees').share();
 
     seq
       .map(res => res.json())
