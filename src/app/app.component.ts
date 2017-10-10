@@ -11,16 +11,24 @@ import { Settings } from '../providers/providers';
   template: `<ion-menu [content]="content">
     <ion-header>
       <ion-toolbar>
-        <ion-title>Pages</ion-title>
+        <ion-title>Gamepoch星游纪门店管理</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content>
       <ion-list>
         <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-          {{p.title}}
+          <ion-icon ios="ios-contact" md="md-contact" *ngIf="p.component === 'AccountPage'"></ion-icon>
+          <ion-icon ios="ios-settings" md="md-settings" *ngIf="p.component === 'SettingsPage'"></ion-icon>
+          <ion-icon ios="ios-information-circle" md="md-information-circle" *ngIf="p.component === 'AboutPage'"></ion-icon>
+          &nbsp;{{p.title}}
         </button>
+        <button ion-item (click)="doLogout()">
+        <ion-icon ios="ios-exit" md="md-exit"></ion-icon>
+        &nbsp;注销
+      </button>
       </ion-list>
+
     </ion-content>
 
   </ion-menu>
@@ -32,17 +40,9 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   pages: any[] = [
-    { title: 'Welcome', component: 'WelcomePage' },
-    { title: 'Tabs', component: 'TabsPage' },
-    { title: 'Cards', component: 'CardsPage' },
-    { title: 'Content', component: 'ContentPage' },
-    { title: 'Login', component: 'LoginPage' },
-    { title: 'Signup', component: 'SignupPage' },
-    { title: 'Master Detail', component: 'ListMasterPage' },
-    { title: 'Menu', component: 'MenuPage' },
-    { title: '活动', component: 'ActivitiesPage' },
-    { title: '销售', component: 'SalesPage' },
-    { title: '销售单品', component:'SalesItemPage'}
+    { title: '账户', component: 'AccountPage' },
+    { title: '设置', component: 'SettingsPage' },
+    { title: '关于', component: 'AboutPage' },
   ]
 
   constructor(private translate: TranslateService, private platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
@@ -77,5 +77,9 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+  doLogout() {
+    console.log("注销");
   }
 }

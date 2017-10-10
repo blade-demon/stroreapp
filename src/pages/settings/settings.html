@@ -1,7 +1,15 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ pageTitle }}</ion-title>
+    <button ion-button menuToggle start>
+      <ion-icon ios="ios-menu" md="md-menu"></ion-icon>
+    </button>
+    <ion-title>设置</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="doGoMainPage()">
+              <ion-icon ios="ios-home" md="md-home"></ion-icon>
+          </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

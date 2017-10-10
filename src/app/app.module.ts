@@ -15,7 +15,7 @@ import { ImagePicker } from '@ionic-native/image-picker';
 
 import { Activities } from '../mocks/providers/activities';
 import { Settings } from '../providers/providers';
-import { User } from '../providers/providers';
+import { EmployeesProvider } from '../providers/providers';
 import { Api } from '../providers/providers';
 import { MyApp } from './app.component';
 
@@ -73,7 +73,7 @@ export function provideSettings(storage: Storage) {
   providers: [
     Api,
     Activities,
-    User,
+    EmployeesProvider,
     Camera,
     File,
     FileTransfer,

@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, Nav, NavController } from 'ionic-angular';
+import { Tab1Root } from '../pages';
 
 @IonicPage()
 @Component({
@@ -7,18 +8,18 @@ import { IonicPage, Nav, NavController } from 'ionic-angular';
   templateUrl: 'menu.html'
 })
 export class MenuPage {
-  // A reference to the ion-nav in our component
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = 'ContentPage';
+  rootPage: any = Tab1Root;
 
   pages: Array<{ title: string, component: any }>;
 
   constructor(public navCtrl: NavController) {
-    // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Sign in', component: 'LoginPage' },
-      { title: 'Signup', component: 'SignupPage' }
+      { title: '首页', component: 'HomePage' },
+      { title: '设置', component: 'SettingsPage' },
+      { title: '关于', component: 'AboutPage'},
+      { title: '退出', component: 'LogoutPage'}
     ];
   }
 

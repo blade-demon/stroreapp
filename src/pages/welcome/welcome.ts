@@ -50,11 +50,11 @@ export class WelcomePage {
       this.currentStores = [];
       return;
     }
-    this.currentStores = this.filterStores({Name: val});
+    this.currentStores = this.filterStores({ Name: val });
   }
 
   doLogin() {
-    this.navCtrl.push('LoginPage');
+    this.navCtrl.push('LoginPage', { store: this.selectedStore });
   }
 
   select(store: Store) {
