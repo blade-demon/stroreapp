@@ -14,13 +14,13 @@
             <ion-grid>
                 <ion-row>
                     <ion-col col-3 style="text-align:left">
+                        <p>商品图标</p>
+                    </ion-col>
+                    <ion-col col-3 style="text-align:left">
                         <p>商品名称</p>
                     </ion-col>
-                    <ion-col col-3 style="text-align:center">
-                        <p>单价</p>
-                    </ion-col>
                     <ion-col col-3 style="text-align:right">
-                        <p>销量</p>
+                        <p>单价</p>
                     </ion-col>
                     <ion-col col-3 style="text-align:right">
                         <p>查看</p>
@@ -29,17 +29,17 @@
             </ion-grid>
         </ion-item-divider>
         <ion-item *ngFor="let game of games">
-            <ion-row>
-                <ion-col col-3 style="text-align:left">
-                    <p>{{game.name}}</p>
+            <ion-row style="display:table">
+                <ion-col col-3 style="text-align:left;display: table-cell;vertical-align: middle;">
+                  <img src="{{game.ProdPicUrl}}" alt="商品名称">
                 </ion-col>
-                <ion-col col-3 style="text-align:center">
-                    <p>{{game.price}}</p>
+                <ion-col col-3 style="text-align:left; display: table-cell;vertical-align: middle;">
+                    <p style="line-height: 100%" text-wrap>{{game.ProductName}}</p>
                 </ion-col>
-                <ion-col col-3 style="text-align:right">
-                    <p>{{game.amount}}</p>
+                <ion-col col-3 style="text-align:right;display: table-cell;vertical-align: middle;">
+                    <p>{{game.Price}}</p>
                 </ion-col>
-                <ion-col col-3 style="text-align:right">
+                <ion-col col-3 style="text-align:right;display: table-cell;vertical-align: middle;">
                     <ion-icon ios="ios-search" md="md-search" (click)="doViewDetail(game)"></ion-icon>
                 </ion-col>
             </ion-row>
