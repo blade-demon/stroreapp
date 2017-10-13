@@ -2,7 +2,7 @@
     <ion-navbar>
         <ion-title>
             <ion-icon ios="ios-create" md="md-create"></ion-icon>
-            创建新记录
+            添加销售记录
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="onCancel()">
@@ -23,7 +23,7 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding="">
     <ion-list>
         <form [formGroup]="form" (ngSubmit)="createNewRecord()">
             <ion-item>
@@ -46,7 +46,7 @@
                 <ion-label>库存</ion-label>
                 <ion-input dir="rtl" type="number" formControlName="inStock"></ion-input>
             </ion-item>
-            <button ion-button type="submit" color="primary" full [disabled]="!form.valid">提交</button>
+            <button ion-button type="submit" color="primary" [disabled]="!form.valid" style="position:absolute; bottom: 0px; left:0px;width:100%">提交</button>
         </form>
     </ion-list>
 </ion-content>

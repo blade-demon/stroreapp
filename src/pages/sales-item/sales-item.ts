@@ -17,15 +17,18 @@ export class SalesItemPage {
     let item = this.navParams.get("item");
     this.salesItem = item;
     this.salesArray = item.salesDetail;
-    console.log(this.salesArray);
   }
 
   ionViewWillEnter() {
-    // console.log(this.salesItem);
-    this.api.get("saledatainfoes", {StoreID: 2, ProductId: 10}).subscribe(data => {
+    console.log("当前商品信息是：", this.salesItem);
+    this.api.get("saledatainfoes", {StoreID: 2, ProductId: this.salesItem.ID}).subscribe(data => {
       let salesInfo  = data.json();
-      this.salesArray = salesInfo.map(function(sales){
-        return { date: sales.SaleDate, sold: sales.SaleAmount, purchase: sales.PurchaseAmount, inStock: sales.InStockAmount}
+      console.log("商品的信息：", salesInfo);
+      let tempArray = salesInfo.filter(item => {
+        return item.StoreID == 2 && item.Product.ID == this.salesItem.ID;
+      });
+      this.salesArray = tempArray.map(function(sales){
+          return { date: sales.SaleDate, sold: sales.SaleAmount, purchase: sales.PurchaseAmount, inStock: sales.InStockAmount}
       });
     })
   }

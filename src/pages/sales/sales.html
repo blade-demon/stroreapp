@@ -23,7 +23,7 @@
                         <p>单价</p>
                     </ion-col>
                     <ion-col col-3 style="text-align:right">
-                        <p>查看</p>
+                        <p></p>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -31,7 +31,7 @@
         <ion-item *ngFor="let game of games">
             <ion-row style="display:table">
                 <ion-col col-3 style="text-align:left;display: table-cell;vertical-align: middle;">
-                  <img src="{{game.ProdPicUrl}}" alt="商品名称">
+                    <img src="{{game.ProdPicUrl}}" alt="商品名称">
                 </ion-col>
                 <ion-col col-3 style="text-align:left; display: table-cell;vertical-align: middle;">
                     <p style="line-height: 100%" text-wrap>{{game.ProductName}}</p>
@@ -40,7 +40,8 @@
                     <p>{{game.Price}}</p>
                 </ion-col>
                 <ion-col col-3 style="text-align:right;display: table-cell;vertical-align: middle;">
-                    <ion-icon ios="ios-search" md="md-search" (click)="doViewDetail(game)"></ion-icon>
+                    <p style="color: #498aff" (click)="doViewDetail(game)">查看</p>
+                    <!-- <ion-icon ios="ios-search" md="md-search" (click)="doViewDetail(game)"></ion-icon> -->
                 </ion-col>
             </ion-row>
         </ion-item>

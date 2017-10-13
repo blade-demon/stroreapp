@@ -1,34 +1,34 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
+    <ion-navbar>
+        <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>主页</ion-title>
-  </ion-navbar>
+        <ion-title>主页</ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header color="primary">
-      <h3 style="color:white">销售情况</h3>
-    </ion-list-header>
-    <ion-item *ngFor="let product of products">
-      <p>销售NBA2K18数量
-        <strong style="float:right">{{ product.name }}</strong>
-      </p>
-    </ion-item>
-    <ion-list-header color="primary">
-      <h3 style="color:white">活动情况</h3>
-    </ion-list-header>
-    <ion-item>
-      <p>已完成活动个数
-        <strong style="float:right">0</strong>
-      </p>
-    </ion-item>
-    <ion-item>
-      <p>待完成活动个数
-        <strong style="float:right">0</strong>
-      </p>
-    </ion-item>
-  </ion-list>
+    <ion-list>
+        <ion-list-header color="primary">
+            <h3 style="color:white">销售情况</h3>
+        </ion-list-header>
+        <ion-item *ngFor="let product of products">
+            <p>{{ product.ProductName }}
+                <strong style="float:right">{{ product.TotalSalesAmount }}</strong>
+            </p>
+        </ion-item>
+        <ion-list-header color="primary">
+            <h3 style="color:white">活动情况</h3>
+        </ion-list-header>
+        <ion-item>
+            <p>已完成活动个数
+                <strong style="float:right">0</strong>
+            </p>
+        </ion-item>
+        <ion-item>
+            <p>待完成活动个数
+                <strong style="float:right">0</strong>
+            </p>
+        </ion-item>
+    </ion-list>
 </ion-content>
