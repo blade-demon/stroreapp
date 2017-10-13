@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController, LoadingController, NavParams } from 'ionic-angular';
 
 import { Store } from "../../models/store";
@@ -14,20 +13,18 @@ import { MainPage } from '../pages';
 })
 export class LoginPage {
   account: { username: string, password: string } = {
-    username: 'gamepoch',
-    password: 'gamepoch'
+    username: '',
+    password: ''
   };
 
-  // Our translated text strings
   private loginErrorString: string;
-  private store: Store;
+  private store: any;
   private employee: Employee;
 
   constructor(public navCtrl: NavController,
     public loadingCtrl: LoadingController,
     public employees: EmployeesProvider,
     public toastCtrl: ToastController,
-    public translateService: TranslateService,
     public navParams: NavParams, ) {
 
     this.loginErrorString = "登录失败，请检查用户名和密码后重试！";
@@ -35,7 +32,8 @@ export class LoginPage {
 
   ionViewWillEnter() {
     this.store = this.navParams.get('store');
-    console.log(typeof this.store);
+    console.log(this.store.ID);
+    console.log(this.store.Name);
   }
 
   // 管理员登录
