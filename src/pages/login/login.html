@@ -1,11 +1,14 @@
 <ion-header>
     <ion-navbar>
-        <ion-title> 负责人登录</ion-title>
+        <ion-title>负责人登录</ion-title>
     </ion-navbar>
 </ion-header>
 
 
-<ion-content>
+<ion-content padding>
+    <h2 text-wrap text-center style="margin: 20px 0">
+        {{ storeName }}
+    </h2>
     <form (submit)="doLogin()">
         <ion-list>
             <ion-item>

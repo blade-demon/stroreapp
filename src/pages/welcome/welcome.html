@@ -2,30 +2,30 @@
 
 </ion-header>
 <ion-content scroll="false">
-  <div class="splash-bg"></div>
-  <div class="splash-info">
-    <div class="splash-logo"></div>
-    <div class="splash-intro">
-      Gamepoch星游纪门店
+    <div class="splash-bg"></div>
+    <div class="splash-info">
+        <div class="splash-logo"></div>
+        <div class="splash-intro">
+            Gamepoch星游纪门店
+        </div>
     </div>
-  </div>
-  <div padding>
+    <div padding>
 
-    <ion-card>
-      <p text-center>
-        <ion-searchbar [(ngModel)]="storeInput"  (ionInput)="getStores($event)" placeholder="查找"></ion-searchbar>
-      </p>
-      <p *ngFor="let store of currentStores" (click)="select(store)" [hidden]="hideCurrentStores">
-        {{store.Name}}
-      </p>
-      <h1 *ngIf="selectedStore" text-center padding>{{selectedStore.Name}}</h1>
-    </ion-card>
-  </div>
-  <div text-center style="bottom: 10%; position: absolute; width: 100%">
-    <button ion-button icon-end large clear (click)="doLogin()" [disabled]="!selectedStore">
+        <ion-card>
+            <p text-center>
+                <ion-searchbar [(ngModel)]="storeInput" (ionInput)="getStores($event)" placeholder="输入店名选择您所的门店"></ion-searchbar>
+            </p>
+            <p padding *ngFor="let store of currentStores" (click)="select(store)" [hidden]="hideCurrentStores">
+                {{store.Name}}
+            </p>
+            <h1 *ngIf="selectedStore" text-center padding>{{selectedStore.Name}}</h1>
+        </ion-card>
+    </div>
+    <div text-center style="bottom: 10%; position: absolute; width: 100%" *ngIf="selectedStore">
+        <button ion-button icon-end large clear (click)="doLogin()">
               继续<ion-icon name="arrow-forward"></ion-icon>
             </button>
-  </div>
+    </div>
 </ion-content>
 
 <!-- <ion-footer>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MainPage } from '../pages';
+import { StorageProvider } from "../../providers/storage/storage";
 @IonicPage()
 @Component({
   selector: 'page-account',
@@ -8,11 +9,21 @@ import { MainPage } from '../pages';
 })
 export class AccountPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  storeInfo: any;
+  employeeInfo: any;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AccountPage');
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storageProvider: StorageProvider) {}
+
+  ionViewWillEnter() {
+    this.storageProvider.getStoreInfo().then((data) => {
+      // console.log(data);
+      this.storeInfo = data;
+    });
+
+    this.storageProvider.getEmployeeInfo().then(data => {
+      this.employeeInfo = data;
+      console.log(this.employeeInfo);
+    })
   }
 
   doGoMainPage() {

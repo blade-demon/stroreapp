@@ -5,8 +5,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
 
 import { FirstRunPage } from '../pages/pages';
+import { LoginPage } from '../pages/pages';
 import { Settings } from '../providers/providers';
-
+import { StorageProvider } from '../providers/storage/storage';
 @Component({
   template: `<ion-menu [content]="content">
     <ion-header>
@@ -21,12 +22,13 @@ import { Settings } from '../providers/providers';
           <ion-icon ios="ios-contact" md="md-contact" *ngIf="p.component === 'AccountPage'"></ion-icon>
           <ion-icon ios="ios-settings" md="md-settings" *ngIf="p.component === 'SettingsPage'"></ion-icon>
           <ion-icon ios="ios-information-circle" md="md-information-circle" *ngIf="p.component === 'AboutPage'"></ion-icon>
+          <ion-icon ios="ios-exit" md="md-exit" *ngIf="p.component === '${LoginPage}'"></ion-icon>
           &nbsp;{{p.title}}
         </button>
-        <button ion-item (click)="doLogout()">
+        <!--button ion-item (click)="doLogout()">
         <ion-icon ios="ios-exit" md="md-exit"></ion-icon>
         &nbsp;注销
-      </button>
+      </button-->
       </ion-list>
 
     </ion-content>
@@ -43,9 +45,16 @@ export class MyApp {
     { title: '账户', component: 'AccountPage' },
     { title: '设置', component: 'SettingsPage' },
     { title: '关于', component: 'AboutPage' },
+    { title: '注销', component: LoginPage },
   ]
 
-  constructor(private translate: TranslateService, private platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
+  constructor(private translate: TranslateService,
+    private platform: Platform,
+    settings: Settings,
+    private config: Config,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
+    private storageProvider: StorageProvider) {
     this.initTranslate();
   }
 
@@ -76,10 +85,13 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
-  }
 
-  doLogout() {
-    console.log("注销");
+    if(page.component === `${LoginPage}`) {
+      console.log("注销");
+      this.storageProvider.changeLoginState(false);
+      this.nav.setRoot(page.component);
+    } else {
+      this.nav.setRoot(page.component);
+    }
   }
 }

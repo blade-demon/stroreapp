@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 import { Store } from '../../models/store';
 import { StoresProvider } from "../../providers/stores/stores";
+import { StorageProvider } from "../../providers/storage/storage";
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -18,7 +19,8 @@ export class WelcomePage {
     public navCtrl: NavController,
     public storesProvider: StoresProvider,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController) { }
+    public toastCtrl: ToastController,
+    public storageProvider: StorageProvider) { }
 
   ionViewWillEnter() {
     let loader = this.loadingCtrl.create({
@@ -28,7 +30,7 @@ export class WelcomePage {
     loader.present().then(() => {
       this.storesProvider.query().subscribe((resp) => {
         loader.dismiss();
-        console.log(resp);
+        // console.log(resp);
         this.stores = resp;
       }, (err) => {
         this.errorString = err;
@@ -54,13 +56,17 @@ export class WelcomePage {
   }
 
   doLogin() {
+    // 保存门店数据到storage
+    this.storageProvider.saveStoreInfo(this.selectedStore);
+    console.log("要登录的门店是：",this.selectedStore);
+    // 跳转页面到门店负责人登录界面
     this.navCtrl.push('LoginPage', { store: this.selectedStore });
   }
 
   select(store: Store) {
     this.hideCurrentStores = true;
     this.selectedStore = store;
-    console.log(store.Name);
+    // console.log(store.Name);
   }
 
   filterStores(params?: any) {
