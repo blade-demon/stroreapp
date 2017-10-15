@@ -12,6 +12,9 @@
         <ion-list-header color="primary">
             <h3 style="color:white">销售情况</h3>
         </ion-list-header>
+        <ion-item *ngIf="!products">
+            <p text-center>暂无数据</p>
+        </ion-item>
         <ion-item *ngFor="let product of products">
             <p>{{ product.ProductName }}
                 <strong style="float:right">{{ product.TotalSalesAmount }}</strong>

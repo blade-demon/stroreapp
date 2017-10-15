@@ -1,19 +1,19 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle start>
-          <ion-icon ios="ios-menu" md="md-menu"></ion-icon>
+    <ion-navbar>
+        <button ion-button menuToggle start>
+      <ion-icon ios="ios-menu" md="md-menu"></ion-icon>
+    </button>
+        <ion-title>关于</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="doGoMainPage()">
+          <ion-icon ios="ios-home" md="md-home"></ion-icon>
         </button>
-    <ion-title>关于</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="doGoMainPage()">
-              <ion-icon ios="ios-home" md="md-home"></ion-icon>
-           </button>
-    </ion-buttons>
-  </ion-navbar>
-
+        </ion-buttons>
+    </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-
+    <h2 text-center padding>关于App的使用说明</h2>
+    <p text-wrap>该应用是为了加强各门店与星游纪的合作关系，提升沟通效率而开发。本应用是由Gamepoch星游纪开发维护，如有使用问题请联系工作人员。</p>
 </ion-content>

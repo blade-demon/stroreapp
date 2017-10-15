@@ -19,7 +19,7 @@ export class StorageProvider {
   // 获取店铺信息
   getStoreInfo() {
     return new Promise(resolve => {
-      this.storage.get('storeInfo').then((val)=>{
+      this.storage.get('storeInfo').then((val) => {
         // console.log("获得的店铺信息：", val);
         resolve(JSON.parse(val));
       });
@@ -34,10 +34,10 @@ export class StorageProvider {
   // 获取登录用户的信息
   getEmployeeInfo() {
     return new Promise(resolve => {
-    this.storage.get('employeeInfo').then(val => {
-      resolve(JSON.parse(val));
+      this.storage.get('employeeInfo').then(val => {
+        resolve(JSON.parse(val));
+      });
     });
-  });
   }
 
   // 清除登录信息

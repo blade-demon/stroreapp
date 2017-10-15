@@ -33,18 +33,30 @@ export class Api {
   }
 
   post(endpoint: string, body: any, options?: RequestOptions) {
+    if (!options) {
+      options = new RequestOptions();
+    }
     return this.http.post(this.url + '/' + endpoint, body, options);
   }
 
   put(endpoint: string, body: any, options?: RequestOptions) {
+    if (!options) {
+      options = new RequestOptions();
+    }
     return this.http.put(this.url + '/' + endpoint, body, options);
   }
 
   delete(endpoint: string, options?: RequestOptions) {
+    if (!options) {
+      options = new RequestOptions();
+    }
     return this.http.delete(this.url + '/' + endpoint, options);
   }
 
   patch(endpoint: string, body: any, options?: RequestOptions) {
+    if (!options) {
+      options = new RequestOptions();
+    }
     return this.http.put(this.url + '/' + endpoint, body, options);
   }
 }

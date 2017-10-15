@@ -3,7 +3,7 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
           </button>
-        <ion-title>活动列表</ion-title>
+        <ion-title>{{ store.Name }}活动列表</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -26,7 +26,7 @@
                     </ion-col>
                     <ion-col col-2 style="text-align:right">
                         <!-- <ion-icon ios="ios-hammer" md="md-hammer"></ion-icon> -->
-                        <p>操作</p>
+                        <p></p>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -43,7 +43,7 @@
                     <p>{{activity.status}}</p>
                 </ion-col>
                 <ion-col col-2 style="text-align:right">
-                    <ion-icon ios="ios-search" md="md-search" (click)="doViewDetail(activity)"></ion-icon>
+                    <p style="color: #488aff" (click)="doViewDetail(activity)">查看</p>
                 </ion-col>
             </ion-row>
         </ion-item>
