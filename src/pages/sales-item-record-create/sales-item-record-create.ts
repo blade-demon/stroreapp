@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicPage, NavController, ViewController, LoadingController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, ToastController, LoadingController, NavParams } from 'ionic-angular';
 import { Api } from '../../providers/api/api';
 import { StorageProvider } from '../../providers/storage/storage';
 import { Http, RequestOptions, URLSearchParams } from '@angular/http';
@@ -19,6 +19,7 @@ export class SalesItemRecordCreatePage {
 
   constructor(public navCtrl: NavController,
     public loaderCtrl: LoadingController,
+    private toastCtrl: ToastController,
     public viewCtrl: ViewController,
     public navParams: NavParams,
     private formBuilder: FormBuilder,
@@ -65,12 +66,27 @@ export class SalesItemRecordCreatePage {
     });
     loader.present();
 
-    this.http.post("http://portal.gamepoch.com/GEPortal/api/salesdatainfoes",data).subscribe((resp) => {
-      console.log("创建的新数据", resp.json());
+    this.api.post("saledatainfoes", data).subscribe(resp => {
+      console.log("创建新的数据", resp.json());
       loader.dismiss();
-    }, (error) => {
+      const toast = this.toastCtrl.create({
+        message: '提交成功！',
+        duration: 1000,
+        position: 'bottom'
+      });
+
+      toast.onDidDismiss(() => {
+        this.viewCtrl.dismiss(resp.json());
+      });
+      toast.present();
+    }, error => {
       console.log(error);
-      // this.viewCtrl.dismiss();
+      const toast = this.toastCtrl.create({
+        message: '提交失败',
+        duration: 1000,
+        position: 'bottom'
+      });
+      toast.present();
     });
   }
 

@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/map';
 
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, URLSearchParams } from '@angular/http';
+import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 
 /**
  * Api is a generic REST Api handler. Set your API url first.
@@ -34,7 +34,10 @@ export class Api {
 
   post(endpoint: string, body: any, options?: RequestOptions) {
     if (!options) {
-      options = new RequestOptions();
+      let headers = new Headers();
+      let options = new RequestOptions();
+      headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      options.headers = headers;
     }
     return this.http.post(this.url + '/' + endpoint, body, options);
   }

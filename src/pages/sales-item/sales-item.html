@@ -26,9 +26,18 @@
                 <ion-col col-3 text-center>库存</ion-col>
             </ion-row>
         </ion-item>
+        <ion-item *ngIf="!salesArray" padding>
+            <ion-row style="text-align:center">
+                <ion-col></ion-col>
+                <ion-col>
+                    <p text-center>暂无数据</p>
+                </ion-col>
+                <ion-col></ion-col>
+            </ion-row>
+        </ion-item>
         <ion-item *ngFor="let sales of salesArray">
             <ion-row>
-                <ion-col col-3 text-center> {{sales.date.slice(0,10)}} </ion-col>
+                <ion-col col-3 text-center> {{sales.date.slice(0,10) }} </ion-col>
                 <ion-col col-3 text-center> {{sales.sold}} </ion-col>
                 <ion-col col-3 text-center> {{sales.purchase}} </ion-col>
                 <ion-col col-3 text-center> {{sales.inStock}} </ion-col>

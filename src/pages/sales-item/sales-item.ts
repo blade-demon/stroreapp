@@ -49,9 +49,14 @@ export class SalesItemPage {
   doCreateNewItem() {
     let addModal = this.modalCtrl.create(SalesItemRecordCreatePage, { item: this.salesItem });
     addModal.onDidDismiss(item => {
-      // if (item) {
-      //   this.activities.add(item);
-      // }
+      let saleInfo = {
+        date: String(item.SaleDate),
+        inStock: item.InStockAmount,
+        purchase: item.PurchaseAmount,
+        sold: item.SaleAmount
+      };
+      console.log(saleInfo);
+      this.salesArray.push(saleInfo);
     });
     addModal.present();
   }
