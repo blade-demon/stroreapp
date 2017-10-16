@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController, LoadingController, ToastController } from 'ionic-angular';
 import { ImgServiceProvider } from "../../providers/img-service/img-service";
-
+import * as randomize from 'randomatic';
 declare var AzureStorage: any;
 declare const Buffer;
 
@@ -19,11 +19,16 @@ export class ActivityItemEditPage {
   selectedPage: any;
 
   public base64Image: string;
-  // 活动准备照片
+  // 活动准备照片base64Array
   storePics: any;
   shelvesPics: any;
   storeShowPics: any;
-  // 活动结果
+  // 活动准备照片URLArray
+  storePicsSaved: any;
+  shelvesPicsSaved: any;
+  storeShowPicsSaved: any;
+
+  // 活动结果URLArray
   attend: number;
   join: number;
   live: any;
@@ -33,6 +38,12 @@ export class ActivityItemEditPage {
   liverPics: any;
   supporterPics: any;
 
+  // 活动结果照片URLArray
+  playersPicsSaved: any;
+  spectatorPicsSaved: any;
+  advertisePicsSaved: any;
+  liverPicsSaved: any;
+  supporterPicsSaved: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -45,9 +56,14 @@ export class ActivityItemEditPage {
   ) {
     this.activity = this.navParams.get("item");
     this.selectedPage = "prepare";
+    // 本地文件储存
     this.storePics = [];
     this.shelvesPics = [];
     this.storeShowPics = [];
+    // 上传后文件URL array
+    this.storePicsSaved = [];
+    this.shelvesPicsSaved = [];
+    this.storeShowPicsSaved = [];
 
     this.attend = 0;
     this.join = 0;
@@ -57,10 +73,17 @@ export class ActivityItemEditPage {
     this.advertisePics = [];
     this.liverPics = [];
     this.supporterPics = [];
+
+    // 活动结果上传后文件URL array
+    this.playersPicsSaved = [];
+    this.spectatorPicsSaved = [];
+    this.advertisePicsSaved = [];
+    this.liverPicsSaved = [];
+    this.supporterPicsSaved = [];
+
     // Azure Blob Storage Init
     this.blobStorageService = AzureStorage.createBlobService("DefaultEndpointsProtocol=https;AccountName=storeapp;AccountKey=cwzlYfEC+rSZRmt2ywr4GqVKytXsMvh/a6bIgH2zzlYLu5BLa2fvqMw1fHHkrEEugUlLlhBmik+GRQG4TpUtpQ==;EndpointSuffix=core.chinacloudapi.cn");
   }
-
 
   // 获取照片
   getImageFromCamera(imageArray) {
@@ -247,22 +270,41 @@ export class ActivityItemEditPage {
     loading.present();
 
     let fileArray = [];
-    var storePicsLength = this.storePics.length;
-    var shelvesPicsLength = this.shelvesPics.length;
-    var storeShowPicsLength = this.storeShowPics.length;
+    let savedArray = [];
+
     fileArray = fileArray.concat(this.storePics).concat(this.shelvesPics).concat(this.storeShowPics);
-    this.uploadImg(fileArray, [storePicsLength, shelvesPicsLength, storeShowPicsLength], function(err, result){
-      loading.dismiss();
-      if(!err) {
-        // alert(result);
-        let alert = this.alertCtrl.create({
-          subTitle: '图片上传成功！',
-          buttons: ['确定']
-        });
-        alert.present();
-      } else {
-        alert(err);
-      }
+    for (let i = 0; i < fileArray.length; i++) {
+      savedArray.push(randomize('Aa0', 10));
+    }
+
+    this.storePicsSaved = savedArray.slice(0, this.storePics.length);
+    this.shelvesPicsSaved = savedArray.slice(this.storePics.length, this.storePics.length + this.shelvesPics.length);
+    this.storeShowPicsSaved = savedArray.slice(this.storePics.length + this.shelvesPics.length, this.storePics.length + this.shelvesPics.length + this.storeShowPics.length);
+
+    this.uploadImg(fileArray, savedArray, (err, result) => {
+      loading.dismiss().then(() => {
+        alert("上传成功！");
+        this.viewCtrl.dismiss();
+        // let alert = this.alertCtrl.create({
+        //   title: '',
+        //   subTitle: '图片上传成功！',
+        //   buttons: ['OK']
+        // });
+        // alert.present();
+        // if (!err) {
+        //   let toast = this.toastCtrl.create({
+        //     message: '',
+        //     duration: 1000
+        //   });
+        //   toast.present();
+        // } else {
+        //   let toast = this.toastCtrl.create({
+        //     message: '图片上传失败！',
+        //     duration: 1000
+        //   });
+        //   toast.present();
+        // }
+      });
     });
   }
 
@@ -280,7 +322,7 @@ export class ActivityItemEditPage {
   }
 
   // 上传图片
-  uploadImg(files: any[], picLengthArray, callback) {
+  uploadImg(files: any[], savedArray, callback) {
     if (!files.length) {
       return;
     }
@@ -288,8 +330,9 @@ export class ActivityItemEditPage {
     // 创建容器
     this.createContainer("images", (error, result) => {
       if (!error) {
+        // alert("files:" + JSON.stringify(files));
         // 上传Blob
-        this.uploadFiles("images", files, picLengthArray, function (error, result) {
+        this.uploadFiles("images", files, savedArray, function (error, result) {
           if (!error) {
             callback(null, "上传结果：" + result);
           } else {
@@ -318,31 +361,20 @@ export class ActivityItemEditPage {
   }
 
   // 上传文件
-  uploadFiles(containerName, files, picLengthArray, callback) {
+  uploadFiles(containerName, files, savedArray, callback) {
     var finished = 0;
     var blobService = this.blobStorageService;
-    var imgCategory = "";
+
     files.forEach(function (file, index) {
       // var blobName = file.replace(/^.*[\\\/]/, '');
       var fileInfo = [];
       fileInfo = file.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
       console.log(fileInfo);
       var type = fileInfo[1];
-
-      if(index < picLengthArray[0]) {
-        imgCategory = "storePics";
-      }
-      if(picLengthArray[0] <= index < picLengthArray[0] + picLengthArray[1]) {
-        imgCategory = "shelvesPics";
-      }
-      if(picLengthArray[0] + picLengthArray[1] <= index < picLengthArray[0] + picLengthArray[1] + picLengthArray[2]) {
-        imgCategory = "storeShowPics";
-      }
-
-      var blobName = imgCategory + Date.now() + ".jpeg";
+      var blobName = savedArray[index] + ".jpeg";
       var fileBuffer = new Buffer(fileInfo[2], "base64");
       console.log(fileBuffer);
-      blobService.createBlockBlobFromText(containerName, blobName, fileBuffer, {contentType: type}, function (error, result, response) {
+      blobService.createBlockBlobFromText(containerName, blobName, fileBuffer, { contentType: type }, function (error, result, response) {
         finished++;
         if (error) {
           callback(error);

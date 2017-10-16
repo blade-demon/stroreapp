@@ -36,38 +36,53 @@ export class LoginPage {
   }
 
   ionViewWillEnter() {
-    // 检查门店信息是否存在
-    if(!this.store) {
-      // 从缓存获取数据信息
+    // 1.首先从NavParams获取门店信息
+    this.store = this.navParams.get('store');
+    if (!this.store) {
+      // 2.沒有跳转参数的话从本地缓存获取
       this.storageProvider.getStoreInfo().then(val => {
         this.store = val;
-        console.log(this.store.Name);
         this.storeName = this.store.Name;
+        // 3. 获取门店的店员信息
+        let loader = this.loadingCtrl.create({
+          content: "获取店铺信息..."
+        });
+        loader.present().then(() => {
+          this.api.get("employees").subscribe((resp) => {
+            let employeesArray = resp.json();
+            let employees = employeesArray.filter(item => {
+              return item.StoreID === this.store.ID;
+            });
+            this.employees = employees;
+            console.log(this.employees);
+            loader.dismiss();
+          }, (err) => {
+            loader.dismiss();
+          });
+        });
+      }, (error) => {
+        console.log("获取门店信息失败");
       });
     } else {
-      console.log("门店信息存在");
-      this.store = this.navParams.get('store');
       this.storeName = this.store.Name;
-      console.log(this.store.Name);
-    }
-
-    let loader = this.loadingCtrl.create({
-      content: "获取店铺信息..."
-    });
-
-    loader.present().then(() => {
-      this.api.get("employees").subscribe((resp) => {
-        let employeesArray = resp.json();
-        let employees = employeesArray.filter(item => {
-          return item.StoreID === this.store.ID;
-        });
-        this.employees = employees;
-        console.log(this.employees);
-        loader.dismiss();
-      }, (err) => {
-        loader.dismiss();
+      // 3. 获取门店的店员信息
+      let loader = this.loadingCtrl.create({
+        content: "获取店铺信息..."
       });
-    });
+      loader.present().then(() => {
+        this.api.get("employees").subscribe((resp) => {
+          let employeesArray = resp.json();
+          let employees = employeesArray.filter(item => {
+            return item.StoreID === this.store.ID;
+          });
+          this.employees = employees;
+          console.log(this.employees);
+          loader.dismiss();
+        }, (err) => {
+          loader.dismiss();
+        });
+      });
+    }
   }
 
   // 管理员登录

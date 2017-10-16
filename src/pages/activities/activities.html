@@ -3,7 +3,7 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
           </button>
-        <ion-title>{{ store.Name }}活动列表</ion-title>
+        <ion-title>活动列表</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -16,34 +16,31 @@
                         <!-- <ion-icon ios="ios-calendar" md="md-calendar"></ion-icon> -->
                         <p>日期</p>
                     </ion-col>
-                    <ion-col col-4 style="text-align:center">
+                    <ion-col col-6 style="text-align:center">
                         <!-- <ion-icon ios="ios-flag" md="md-flag"></ion-icon> -->
-                        <p>名称</p>
+                        <p text-wrap>名称</p>
                     </ion-col>
                     <ion-col col-3 style="text-align:right">
                         <!-- <ion-icon ios="ios-pulse" md="md-pulse"></ion-icon> -->
                         <p>状态</p>
                     </ion-col>
-                    <ion-col col-2 style="text-align:right">
-                        <!-- <ion-icon ios="ios-hammer" md="md-hammer"></ion-icon> -->
+                    <!-- <ion-col col-2 style="text-align:right">
+                        <ion-icon ios="ios-hammer" md="md-hammer"></ion-icon>
                         <p></p>
-                    </ion-col>
+                    </ion-col> -->
                 </ion-row>
             </ion-grid>
         </ion-item-divider>
         <ion-item *ngFor="let activity of activities">
-            <ion-row>
+            <ion-row (click)="doViewDetail(activity)">
                 <ion-col col-3 style="text-align:left">
                     <p>{{activity.date}}</p>
                 </ion-col>
-                <ion-col col-4 style="text-align:center">
+                <ion-col col-6 style="text-align:center" text-wrap>
                     <p>{{activity.name}}</p>
                 </ion-col>
                 <ion-col col-3 style="text-align:right">
                     <p>{{activity.status}}</p>
-                </ion-col>
-                <ion-col col-2 style="text-align:right">
-                    <p style="color: #488aff" (click)="doViewDetail(activity)">查看</p>
                 </ion-col>
             </ion-row>
         </ion-item>

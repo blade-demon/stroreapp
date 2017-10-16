@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+// import { FormBuilder, FormGroup } from '@angular/forms';
+// import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { MainPage } from '../pages';
-import { Settings } from '../../providers/providers';
+// import { Settings } from '../../providers/providers';
 import { StorageProvider } from '../../providers/storage/storage';
 import { Api } from '../../providers/api/api';
 @IonicPage()
