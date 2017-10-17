@@ -1,8 +1,7 @@
 import { Api } from './api/api';
 import { ProductsProvider } from './products/products';
 import { StoresProvider } from './stores/stores';
-import { Activities } from '../mocks/providers/activities';
-import { Settings } from './settings/settings';
+import { ActivitiesProvider } from './activities/activities';
 import { EmployeesProvider } from './employees/employees';
 
 export {
@@ -10,6 +9,5 @@ export {
   StoresProvider,
   EmployeesProvider,
   ProductsProvider,
-  Activities,
-  Settings
+  ActivitiesProvider
 };

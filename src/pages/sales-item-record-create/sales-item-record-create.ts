@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, NavController, ViewController, ToastController, LoadingController, NavParams } from 'ionic-angular';
 import { Api } from '../../providers/api/api';
 import { StorageProvider } from '../../providers/storage/storage';
-import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 
 @IonicPage()
 @Component({
@@ -24,9 +23,8 @@ export class SalesItemRecordCreatePage {
     public navParams: NavParams,
     private formBuilder: FormBuilder,
     private api: Api,
-    private http: Http,
     private storageProvider: StorageProvider) {
-    this.form = formBuilder.group({
+    this.form = this.formBuilder.group({
       date: ['', [Validators.required]],
       sold: ['', [Validators.required, Validators.min(0), Validators.max(99999999)]],
       purchase: ['', [Validators.required, Validators.min(0), Validators.max(99999999)]],
@@ -38,11 +36,10 @@ export class SalesItemRecordCreatePage {
   ionViewWillEnter() {
     this.itemInfo = this.navParams.get("item");
     this.storageProvider.getStoreInfo().then(val => {
-
       this.store = val;
       console.log("storeId:", this.store.ID);
     });
-    console.log(this.itemInfo.ID);
+    // console.log(this.itemInfo.ID);
   }
 
   ionViewDidLoad() {

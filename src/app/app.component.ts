@@ -6,7 +6,6 @@ import { Config, Nav, Platform } from 'ionic-angular';
 
 import { FirstRunPage } from '../pages/pages';
 import { LoginPage } from '../pages/pages';
-import { Settings } from '../providers/providers';
 import { StorageProvider } from '../providers/storage/storage';
 @Component({
   template: `<ion-menu [content]="content">
@@ -50,7 +49,6 @@ export class MyApp {
 
   constructor(private translate: TranslateService,
     private platform: Platform,
-    settings: Settings,
     private config: Config,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,

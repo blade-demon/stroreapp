@@ -7,7 +7,7 @@ import { Activity } from '../../models/activity';
 import { Api } from '../api/api';
 
 @Injectable()
-export class Activities {
+export class ActivitiesProvider {
 
   constructor(public http: Http, public api: Api) {
   }

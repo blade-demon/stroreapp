@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController, LoadingController, ToastController } from 'ionic-angular';
 import { ImgServiceProvider } from "../../providers/img-service/img-service";
+import { Api } from '../../providers/api/api';
 import * as randomize from 'randomatic';
 declare var AzureStorage: any;
 declare const Buffer;
@@ -52,7 +53,8 @@ export class ActivityItemEditPage {
     private alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private imgService: ImgServiceProvider
+    private imgService: ImgServiceProvider,
+    private api: Api
   ) {
     this.activity = this.navParams.get("item");
     this.selectedPage = "prepare";
@@ -274,43 +276,69 @@ export class ActivityItemEditPage {
 
     fileArray = fileArray.concat(this.storePics).concat(this.shelvesPics).concat(this.storeShowPics);
     for (let i = 0; i < fileArray.length; i++) {
-      savedArray.push(randomize('Aa0', 10));
+      savedArray.push(randomize('Aa0', 20));
     }
 
-    this.storePicsSaved = savedArray.slice(0, this.storePics.length);
-    this.shelvesPicsSaved = savedArray.slice(this.storePics.length, this.storePics.length + this.shelvesPics.length);
-    this.storeShowPicsSaved = savedArray.slice(this.storePics.length + this.shelvesPics.length, this.storePics.length + this.shelvesPics.length + this.storeShowPics.length);
+    // this.storePicsSaved = savedArray.slice(0, this.storePics.length);
+    // this.shelvesPicsSaved = savedArray.slice(this.storePics.length, this.storePics.length + this.shelvesPics.length);
+    // this.storeShowPicsSaved = savedArray.slice(this.storePics.length + this.shelvesPics.length, this.storePics.length + this.shelvesPics.length + this.storeShowPics.length);
 
     this.uploadImg(fileArray, savedArray, (err, result) => {
-      loading.dismiss().then(() => {
-        alert("上传成功！");
-        this.viewCtrl.dismiss();
-        // let alert = this.alertCtrl.create({
-        //   title: '',
-        //   subTitle: '图片上传成功！',
-        //   buttons: ['OK']
-        // });
-        // alert.present();
-        // if (!err) {
-        //   let toast = this.toastCtrl.create({
-        //     message: '',
-        //     duration: 1000
-        //   });
-        //   toast.present();
-        // } else {
-        //   let toast = this.toastCtrl.create({
-        //     message: '图片上传失败！',
-        //     duration: 1000
-        //   });
-        //   toast.present();
-        // }
+      this.uploadImagesURLToServer(savedArray, 6).then((value) => {
+        loading.dismiss().then(() => {
+          this.viewCtrl.dismiss();
+        })
+        // alert("success");
+      }).catch(e => {
+        alert(e);
       });
     });
   }
 
   // 上传活动结果
   doSubmitResult() {
+    const loading = this.loadingCtrl.create({
+      content: '上传中...'
+    });
+    loading.present();
 
+    let fileArray = [];
+    let savedArray = [];
+
+    fileArray = fileArray.concat(this.playersPics).concat(this.spectatorPics).concat(this.advertisePics).concat(this.liverPics).concat(this.supporterPics);
+    for (let i = 0; i < fileArray.length; i++) {
+      savedArray.push(randomize('Aa0', 20));
+    }
+
+    this.uploadImg(fileArray, savedArray, (err, result) => {
+      this.uploadImagesURLToServer(savedArray.slice(0, this.playersPics.length), 1).then(() => {
+        this.uploadImagesURLToServer(savedArray.slice(this.playersPics.length, this.playersPics.length + this.spectatorPics.length), 2).then(() => {
+          this.uploadImagesURLToServer(savedArray.slice(this.playersPics.length + this.spectatorPics.length, this.playersPics.length + this.spectatorPics.length + this.advertisePics.length), 3).then(() => {
+            this.uploadImagesURLToServer(savedArray.slice(this.playersPics.length + this.spectatorPics.length + this.advertisePics.length, this.playersPics.length + this.spectatorPics.length + this.advertisePics.length + this.liverPics.length), 4).then(() => {
+              this.uploadImagesURLToServer(savedArray.slice(this.playersPics.length + this.spectatorPics.length + this.advertisePics.length + this.liverPics.length, this.playersPics.length + this.spectatorPics.length + this.advertisePics.length + this.liverPics.length + this.supporterPics.length), 5).then(() => {
+                this.api.post("eventdatainfoes", {
+                  "StoreID": this.navParams.get('storeID'),
+                  "EventDate": new Date(this.navParams.get('EventDate')),
+                  "EventID": this.navParams.get('EventID'),
+                  "PplAttend": this.attend,
+                  "PplOnSpot": this.join,
+                  "PplOnLive": this.live
+                }).subscribe(() => {
+                  loading.dismiss().then(() => {
+                    this.viewCtrl.dismiss();
+                  })
+                });
+              });
+            });
+          });
+        })
+        loading.dismiss().then(() => {
+          this.viewCtrl.dismiss();
+        })
+      }).catch(e => {
+        alert(e);
+      });
+    });
   }
 
   buttonPrepareState() {
@@ -383,6 +411,26 @@ export class ActivityItemEditPage {
             callback(null, result);
           }
         }
+      });
+    });
+  }
+
+  uploadImagesURLToServer(imageArray, photoType) {
+    return new Promise((resolve, reject) => {
+      imageArray.forEach(image => {
+        // 上传成功后post结果到服务器
+        let photoData = {
+          "StoreID": this.navParams.get('storeID'),
+          "EventDate": new Date(this.navParams.get('EventDate')),
+          "EventID": this.navParams.get('EventID'),
+          "EventPhotoTypeID": photoType,
+          "EventPhotoUrl": `https://storeapp.blob.core.chinacloudapi.cn/images/${image}.jpeg`
+        };
+        this.api.post('eventphotoinfoes', photoData).subscribe((resp) => {
+          resolve();
+        }, error => {
+          reject(error);
+        });
       });
     });
   }

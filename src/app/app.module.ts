@@ -14,7 +14,6 @@ import { File } from '@ionic-native/file';
 import { ImagePicker } from '@ionic-native/image-picker';
 
 import { Activities } from '../mocks/providers/activities';
-import { Settings } from '../providers/providers';
 import { EmployeesProvider } from '../providers/providers';
 import { Api } from '../providers/providers';
 import { MyApp } from './app.component';
@@ -28,20 +27,13 @@ import { ProductsProvider } from '../providers/products/products';
 import { StoresProvider } from '../providers/stores/stores';
 import { SalesInfoProvider } from '../providers/sales-info/sales-info';
 import { StorageProvider } from '../providers/storage/storage';
+import { ActivitiesProvider } from '../providers/activities/activities';
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function HttpLoaderFactory(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function provideSettings(storage: Storage) {
-  return new Settings(storage, {
-    option1: true,
-    option2: 'Ionitron J. Framework',
-    option3: '3',
-    option4: 'Hello'
-  });
-}
 
 @NgModule({
   declarations: [
@@ -83,9 +75,10 @@ export function provideSettings(storage: Storage) {
     GoogleMaps,
     SplashScreen,
     StatusBar,
-    { provide: Settings, useFactory: provideSettings, deps: [Storage] },
+    // { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
+    ActivitiesProvider,
     ImgServiceProvider,
     ProductsProvider,
     StoresProvider,

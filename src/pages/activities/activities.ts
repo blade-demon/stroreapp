@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, AlertController, NavParams } from 'ionic-angular';
 import { ActivityItemViewPage } from '../activity-item-view/activity-item-view';
-import { Api } from '../../providers/api/api';
+import { ActivitiesProvider } from '../../providers/activities/activities';
 import { StorageProvider } from '../../providers/storage/storage';
 @IonicPage()
 @Component({
@@ -14,7 +14,7 @@ export class ActivitiesPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public api: Api,
+    private activitiesProvider: ActivitiesProvider,
     public storageProvider: StorageProvider,
     private alertCtrl: AlertController,
     public loadingCtrl: LoadingController) {
@@ -103,24 +103,29 @@ export class ActivitiesPage {
     //     "storeShowPics": ["https://storeapp.blob.core.chinacloudapi.cn/images/activities/material.png"]
     //   }
     // }];
+  }
 
-    this.api.get("events").subscribe((resp) => {
-      this.activities = resp.json().map((item) => {
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ActivitiesPage');
+  }
+
+  ionViewWillEnter() {
+    this.activitiesProvider.query("events").subscribe((activities) => {
+      this.activities = activities.map((item) => {
         let status = "未开始";
-        console.log(new Date(item.EventTime));
+        // console.log(new Date(item.EventTime));
         const currentDate = new Date();
-        console.log(currentDate);
-        if(new Date(item.StartDate) > currentDate) {
+        // console.log(currentDate);
+        if (new Date(item.StartDate) > currentDate) {
           // 活动未开始
         }
-        else if(currentDate > new Date(item.EndDate)) {
+        else if (currentDate > new Date(item.EndDate)) {
           // 活动已结束
           status = "已结束";
         } else {
           // 活动进行中
           status = "进行中";
         }
-
         return {
           "date": item.EventTime.slice(0, 10),
           "name": item.EventSubject,
@@ -133,13 +138,7 @@ export class ActivitiesPage {
     }, (error) => {
       console.log(error);
     });
-  }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ActivitiesPage');
-  }
-
-  ionViewWillEnter() {
     // 获取店铺信息
     this.storageProvider.getStoreInfo().then((val) => {
       console.log("获取店铺信息：", val);
