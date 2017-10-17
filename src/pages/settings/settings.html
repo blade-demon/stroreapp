@@ -16,8 +16,20 @@
 
 <ion-content>
     <ion-list padding>
-        <button ion-item (click)="resetPassword()">
-            重设密码
-        </button>
+        <ion-item>
+            <ion-label fixed>当前密码</ion-label>
+            <ion-input type="password" [(ngModel)]="inputPassword" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label fixed>新密码</ion-label>
+            <ion-input type="password" [(ngModel)]="inputNewPassword" minlength="6" maxlength="20" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label fixed>重复新密码</ion-label>
+            <ion-input type="password" [(ngModel)]="inputRepeatNewPassword" minlength="6" maxlength="20" required></ion-input>
+        </ion-item>
+        <button ion-button color="danger" full (click)="resetPassword()" [disabled]="!inputPassword || !inputNewPassword || !inputRepeatNewPassword" style="margin: 20px 0">重设密码</button>
     </ion-list>
 </ion-content>

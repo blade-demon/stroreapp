@@ -11,6 +11,7 @@ import * as _ from "lodash";
 export class HomePage {
 
   store: any;
+  productsList: any[];
   products: any[];
   salesInfo: any[];
   constructor(
@@ -44,6 +45,10 @@ export class HomePage {
         let dataArray = [];
         // 获取店铺销售信息
         this.api.get("saledatainfoes").subscribe((resp) => {
+          // 获得产品列表
+          this.productsList = resp.json().map(item => {
+            return { "ProductName": item.Product.ProductName, "TotalSalesAmount": 0};
+          });
           // 处理产品信息
           let temp = _
             .chain(resp.json())
@@ -74,11 +79,9 @@ export class HomePage {
             })
             dataArray.push({ "ProductName": name, "TotalSalesAmount": sum });
           }
-
-          this.products = dataArray;
-          console.log(this.products);
+          // 过滤产品信息，确保所有产品的数据都列出来，即使产品销售数据为0
+          this.products = _.unionBy(dataArray, this.productsList, "ProductName");
           loader.dismiss();
-
         }, error => { });
       }).catch();
     });

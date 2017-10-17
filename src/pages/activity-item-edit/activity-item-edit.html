@@ -79,6 +79,27 @@
                     </ion-row>
                 </ion-grid>
             </ion-card>
+            <ion-card>
+                <ion-item>
+                    <ion-label> <small>物料尺寸对比照片</small></ion-label>
+                </ion-item>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-6 *ngFor="let pic of compareSizePics; let id = index">
+                            <ion-card class="relative">
+                                <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="doDelete('compareSizePics', id)"></ion-icon>
+                                <img [src]="pic" alt="图片" *ngIf="pic">
+                            </ion-card>
+                        </ion-col>
+                        <ion-col col-12 *ngIf="2 - compareSizePics.length > 0" style="text-align:center; padding: 0 16px">
+                            <button ion-button icon-left clear (click)="presentActionSheet('compareSizePics')">
+                              <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                            选择照片
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
             <ion-row style="margin: 20px 0px">
                 <ion-col col-12 style="padding: 0 16px;">
                     <button ion-button color="primary" full (click)="doSubmitPrepare()" [disabled]="!buttonPrepareState()">

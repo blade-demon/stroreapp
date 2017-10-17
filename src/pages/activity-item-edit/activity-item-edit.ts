@@ -24,10 +24,12 @@ export class ActivityItemEditPage {
   storePics: any;
   shelvesPics: any;
   storeShowPics: any;
+  compareSizePics: any;
   // 活动准备照片URLArray
   storePicsSaved: any;
   shelvesPicsSaved: any;
   storeShowPicsSaved: any;
+  compareSizePicsSaved: any;
 
   // 活动结果URLArray
   attend: number;
@@ -52,7 +54,7 @@ export class ActivityItemEditPage {
     public actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
+    // private toastCtrl: ToastController,
     private imgService: ImgServiceProvider,
     private api: Api
   ) {
@@ -62,10 +64,12 @@ export class ActivityItemEditPage {
     this.storePics = [];
     this.shelvesPics = [];
     this.storeShowPics = [];
+    this.compareSizePics = [];
     // 上传后文件URL array
     this.storePicsSaved = [];
     this.shelvesPicsSaved = [];
     this.storeShowPicsSaved = [];
+    this.compareSizePicsSaved = [];
 
     this.attend = 0;
     this.join = 0;
@@ -103,6 +107,10 @@ export class ActivityItemEditPage {
         case "storeShowPics":
           this.storeShowPics.push(this.base64Image);
           this.storeShowPics.reverse();
+          break;
+        case "compareSizePics":
+          this.compareSizePics.push(this.base64Image);
+          this.compareSizePics.reverse();
           break;
 
         case "playersPics":
@@ -150,6 +158,10 @@ export class ActivityItemEditPage {
         case "storeShowPics":
           this.storeShowPics = this.storeShowPics.concat(newImageFilesArray);
           this.storeShowPics = this.storeShowPics.reverse().slice(0, 2);
+          break;
+        case "compareSizePics":
+          this.compareSizePics = this.compareSizePics.concat(newImageFilesArray);
+          this.compareSizePics = this.compareSizePics.reverse().slice(0, 2);
           break;
 
         case "playersPics":
@@ -202,6 +214,8 @@ export class ActivityItemEditPage {
                 case "storeShowPics":
                   this.storeShowPics.splice(index, 1);
                   break;
+                case "compareSizePics":
+                  this.compareSizePics.splice(index, 1);
 
                 case "playersPics":
                   this.playersPics.splice(index, 1);
@@ -274,7 +288,7 @@ export class ActivityItemEditPage {
     let fileArray = [];
     let savedArray = [];
 
-    fileArray = fileArray.concat(this.storePics).concat(this.shelvesPics).concat(this.storeShowPics);
+    fileArray = fileArray.concat(this.storePics).concat(this.shelvesPics).concat(this.storeShowPics).concat(this.compareSizePics);
     for (let i = 0; i < fileArray.length; i++) {
       savedArray.push(randomize('Aa0', 20));
     }
