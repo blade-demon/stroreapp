@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController, LoadingController, ToastController } from 'ionic-angular';
 import { ImgServiceProvider } from "../../providers/img-service/img-service";
+import { StorageProvider} from "../../providers/storage/storage";
 import { Api } from '../../providers/api/api';
 import * as randomize from 'randomatic';
 declare var AzureStorage: any;
@@ -14,6 +15,7 @@ declare const Buffer;
 
 export class ActivityItemEditPage {
   public blobStorageService: any;
+  private employeeInfo:any;
 
   activity: any;
   item: any;
@@ -56,6 +58,7 @@ export class ActivityItemEditPage {
     public loadingCtrl: LoadingController,
     // private toastCtrl: ToastController,
     private imgService: ImgServiceProvider,
+    private storageProvider: StorageProvider,
     private api: Api
   ) {
     this.activity = this.navParams.get("item");
@@ -89,6 +92,14 @@ export class ActivityItemEditPage {
 
     // Azure Blob Storage Init
     this.blobStorageService = AzureStorage.createBlobService("DefaultEndpointsProtocol=https;AccountName=storeapp;AccountKey=cwzlYfEC+rSZRmt2ywr4GqVKytXsMvh/a6bIgH2zzlYLu5BLa2fvqMw1fHHkrEEugUlLlhBmik+GRQG4TpUtpQ==;EndpointSuffix=core.chinacloudapi.cn");
+  }
+
+  ionViewWillEnter() {
+    console.log("进入设置界面");
+    this.storageProvider.getEmployeeInfo().then(data => {
+      this.employeeInfo = data;
+      console.log(this.employeeInfo.Name);
+    })
   }
 
   // 获取照片
@@ -290,7 +301,7 @@ export class ActivityItemEditPage {
 
     fileArray = fileArray.concat(this.storePics).concat(this.shelvesPics).concat(this.storeShowPics).concat(this.compareSizePics);
     for (let i = 0; i < fileArray.length; i++) {
-      savedArray.push(randomize('Aa0', 20));
+      savedArray.push( this.employeeInfo.Name + '-' + randomize('Aa0', 20));
     }
 
     // this.storePicsSaved = savedArray.slice(0, this.storePics.length);
@@ -321,7 +332,7 @@ export class ActivityItemEditPage {
 
     fileArray = fileArray.concat(this.playersPics).concat(this.spectatorPics).concat(this.advertisePics).concat(this.liverPics).concat(this.supporterPics);
     for (let i = 0; i < fileArray.length; i++) {
-      savedArray.push(randomize('Aa0', 20));
+      savedArray.push(this.employeeInfo.Name + '-' + randomize('Aa0', 20));
     }
 
     this.uploadImg(fileArray, savedArray, (err, result) => {
@@ -356,7 +367,7 @@ export class ActivityItemEditPage {
   }
 
   buttonPrepareState() {
-    return this.storePics.length && this.shelvesPics.length && this.storeShowPics.length;
+    return this.storePics.length && this.shelvesPics.length && this.storeShowPics.length && this.compareSizePics.length;
   }
 
   buttonResultState() {
@@ -411,8 +422,9 @@ export class ActivityItemEditPage {
       // var blobName = file.replace(/^.*[\\\/]/, '');
       var fileInfo = [];
       fileInfo = file.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-      console.log(fileInfo);
+      // console.log(fileInfo);
       var type = fileInfo[1];
+      //alert(this.employeeInfo.Name);
       var blobName = savedArray[index] + ".jpeg";
       var fileBuffer = new Buffer(fileInfo[2], "base64");
       console.log(fileBuffer);

@@ -46,42 +46,46 @@ export class HomePage {
         // 获取店铺销售信息
         this.api.get("saledatainfoes").subscribe((resp) => {
           // 获得产品列表
-          this.productsList = resp.json().map(item => {
-            return { "ProductName": item.Product.ProductName, "TotalSalesAmount": 0};
-          });
-          // 处理产品信息
-          let temp = _
-            .chain(resp.json())
-            .filter(_.iteratee({ StoreID: this.store.ID }))
-            .map(item => {
-              delete item.Store;
-              return {
-                ID: item.ID,
-                InStockAmount: item.InStockAmount,
-                ProductName: item.Product.ProductName,
-                ProductID: item.ProductID,
-                PurchaseAmount: item.PurchaseAmount,
-                SaleAmount: item.SaleAmount,
-                SaleDate: item.SaleDate
-              }
-            })
-            .groupBy('ProductName')
-            // .toPairs()
-            // .map(item => _.zipObject(['ID', 'ProductName', 'SaleAmount'], item))
-            .value();
+          this.api.get("products").subscribe(products => {
+            this.productsList = products.json().map(item => {
+              return { "ProductName": item.ProductName, "TotalSalesAmount": 0};
+            });
+            // 处理产品信息
+            let temp = _
+              .chain(resp.json())
+              .filter(_.iteratee({ StoreID: this.store.ID }))
+              .map(item => {
+                delete item.Store;
+                return {
+                  ID: item.ID,
+                  InStockAmount: item.InStockAmount,
+                  ProductName: item.Product.ProductName,
+                  ProductID: item.ProductID,
+                  PurchaseAmount: item.PurchaseAmount,
+                  SaleAmount: item.SaleAmount,
+                  SaleDate: item.SaleDate
+                }
+              })
+              .groupBy('ProductName')
+              // .toPairs()
+              // .map(item => _.zipObject(['ID', 'ProductName', 'SaleAmount'], item))
+              .value();
 
-          for (let p in temp) {
-            let sum = 0;
-            let name = "";
-            temp[p].map(function (item) {
-              sum += item.SaleAmount;
-              name = item["ProductName"];
-            })
-            dataArray.push({ "ProductName": name, "TotalSalesAmount": sum });
-          }
-          // 过滤产品信息，确保所有产品的数据都列出来，即使产品销售数据为0
-          this.products = _.unionBy(dataArray, this.productsList, "ProductName");
-          loader.dismiss();
+            for (let p in temp) {
+              let sum = 0;
+              let name = "";
+              temp[p].map(function (item) {
+                sum += item.SaleAmount;
+                name = item["ProductName"];
+              })
+              dataArray.push({ "ProductName": name, "TotalSalesAmount": sum });
+            }
+            console.log("商品销售列表：", dataArray);
+            console.log("商品列表：", this.productsList);
+            // 过滤产品信息，确保所有产品的数据都列出来，即使产品销售数据为0
+            this.products = _.unionBy(dataArray, this.productsList, "ProductName");
+            loader.dismiss();
+          });
         }, error => { });
       }).catch();
     });

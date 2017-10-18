@@ -42,58 +42,58 @@ export class SettingsPage {
   }
 
   resetPassword() {
-    let title = '';
-    // 验证密码正确
-    if (this.inputPassword !== this.employeeInfo.Password) {
-      title = '密码错误';
-      let alert = this.alertCtrl.create({
-        title: '提示',
-        subTitle: title,
-        buttons: ['OK']
-      });
-      alert.present();
-      return;
-    }
-    // 验证信息两次输入一致
-    if (this.inputNewPassword !== this.inputRepeatNewPassword) {
-      title = '两次密码输入不一致';
-      let alert = this.alertCtrl.create({
-        title: '提示',
-        subTitle: title,
-        buttons: ['OK']
-      });
-      alert.present();
-      return;
-    }
+    // 去服务器验证密码是否正确
+    this.api.post('employees', { account: this.employeeInfo.Account, password: this.inputPassword}).subscribe((resp) => {
+      // console.log("密码修改成功！");
+      let title = "";
+      // 验证信息两次输入一致
+      if (this.inputNewPassword !== this.inputRepeatNewPassword) {
+        title = '两次密码输入不一致';
+        let alert = this.alertCtrl.create({
+          title: '提示',
+          subTitle: title,
+          buttons: ['OK']
+        });
+        alert.present();
+        return;
+      }
 
-    // 新旧密码一致
-    if (this.inputPassword === this.inputNewPassword || this.inputPassword === this.inputRepeatNewPassword) {
-      title = '新密码不能和旧密码相同';
-      let alert = this.alertCtrl.create({
-        title: '提示',
-        subTitle: title,
-        buttons: ['OK']
+      // 新旧密码一致
+      if (this.inputPassword === this.inputNewPassword || this.inputPassword === this.inputRepeatNewPassword) {
+        title = '新密码不能和旧密码相同';
+        let alert = this.alertCtrl.create({
+          title: '提示',
+          subTitle: title,
+          buttons: ['OK']
+        });
+        alert.present();
+        return;
+      }
+      // 修改密码
+      this.http.get(`http://139.219.99.198/GEPortal/gepls/setpassword?employeeid=${this.employeeInfo.ID}&newpassword=${this.inputNewPassword}`).subscribe(() => {
+        title = '密码修改成功';
+        let alert = this.alertCtrl.create({
+          title: '提示',
+          subTitle: title,
+          buttons: ['OK']
+        });
+        alert.present();
+        alert.dismiss().then(() => {
+          // 更改登录状态
+          this.storageProvider.changeLoginState(false);
+          // 返回到登录界面
+          this.navCtrl.setRoot(LoginPage);
+        });
       });
-      alert.present();
-      return;
-    }
-    // 修改密码
-    this.http.get(`http://139.219.99.198/GEPortal/gepls/setpassword?employeeid=${this.employeeInfo.ID}&newpassword=${this.inputNewPassword}`).subscribe(() => {
-      title = '密码修改成功';
-      let alert = this.alertCtrl.create({
-        title: '提示',
-        subTitle: title,
-        buttons: ['OK']
-      });
-      alert.present();
-      alert.dismiss().then(() => {
-        // 更改登录状态
-        this.storageProvider.changeLoginState(false);
-        // 返回到登录界面
-        this.navCtrl.setRoot(LoginPage);
-      });
+    }, error => {
+        let title = '密码错误';
+        let alert = this.alertCtrl.create({
+          title: '提示',
+          subTitle: title,
+          buttons: ['OK']
+        });
+        alert.present();
     });
-    console.log("reset password");
   }
 
 }

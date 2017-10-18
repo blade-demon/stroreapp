@@ -92,39 +92,58 @@ export class LoginPage {
     });
 
     loader.present().then(() => {
-      let employee = this.employees.filter((item) => {
-        return item.Account === this.account.username;
-      });
-      if (employee[0]) {
-        if (employee[0].Password === this.account.password) {
-          loader.dismiss();
-          console.log("登录成功！");
-          // 保存管理员登录信息
-          this.storageProvider.saveEmployeeInfo(employee[0]);
-          // 设置账户状态为已登录
-          this.storageProvider.changeLoginState(true);
-          // 跳转到店铺信息首页
-          this.navCtrl.push(MainPage);
-        } else {
-          loader.dismiss();
-          console.log("密码错误！");
-          const toast = this.toastCtrl.create({
-            message: this.loginErrorString,
-            duration: 1000,
-            position: 'bottom'
-          });
-          toast.present();
-        }
-      } else {
+      this.api.post('employees', { account: this.account.username, password: this.account.password}).subscribe((resp)=> {
+        console.log(resp.statusText);
+        // 保存管理员登录信息
+        this.storageProvider.saveEmployeeInfo(this.employees[0]);
+        // 设置账户状态为已登录
+        this.storageProvider.changeLoginState(true);
+        // 跳转到店铺信息首页
+        this.navCtrl.push(MainPage);
         loader.dismiss();
-        console.log("用户不存在！");
+      }, (error)=> {
+        loader.dismiss();
+        this.loginErrorString = "请确认用户名和密码后重试！";
         const toast = this.toastCtrl.create({
-          message: '用户不存在！',
+          message: this.loginErrorString,
           duration: 1000,
           position: 'bottom'
         });
         toast.present();
-      }
+      });
+      // let employee = this.employees.filter((item) => {
+      //   return item.Account === this.account.username;
+      // });
+      // if (employee[0]) {
+      //   if (employee[0].Password === this.account.password) {
+      //     loader.dismiss();
+      //     console.log("登录成功！");
+      //     // 保存管理员登录信息
+      //     this.storageProvider.saveEmployeeInfo(employee[0]);
+      //     // 设置账户状态为已登录
+      //     this.storageProvider.changeLoginState(true);
+      //     // 跳转到店铺信息首页
+      //     this.navCtrl.push(MainPage);
+      //   } else {
+      //     loader.dismiss();
+      //     console.log("密码错误！");
+      //     const toast = this.toastCtrl.create({
+      //       message: this.loginErrorString,
+      //       duration: 1000,
+      //       position: 'bottom'
+      //     });
+      //     toast.present();
+      //   }
+      // } else {
+      //   loader.dismiss();
+      //   console.log("用户不存在！");
+      //   const toast = this.toastCtrl.create({
+      //     message: '用户不存在！',
+      //     duration: 1000,
+      //     position: 'bottom'
+      //   });
+      //   toast.present();
+      // }
     }, (err) => {
       console.log(err);
     });
