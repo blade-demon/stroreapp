@@ -57,10 +57,10 @@ export class WelcomePage {
 
   doLogin() {
     // 保存门店数据到storage
-    this.storageProvider.saveStoreInfo(this.selectedStore);
+    // this.storageProvider.saveStoreInfo(this.selectedStore);
     console.log("要登录的门店是：",this.selectedStore);
     // 跳转页面到门店负责人登录界面
-    this.navCtrl.push('LoginPage', { store: this.selectedStore });
+    // this.navCtrl.push('LoginPage', { store: this.selectedStore });
   }
 
   select(store: Store) {

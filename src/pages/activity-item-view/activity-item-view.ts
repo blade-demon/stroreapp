@@ -9,7 +9,7 @@ import { Http } from '@angular/http';
   templateUrl: 'activity-item-view.html',
 })
 export class ActivityItemViewPage {
-  store: any;
+  storeID: any;
   activityItem: any;
   dataResults: any;
   constructor(
@@ -18,7 +18,7 @@ export class ActivityItemViewPage {
     public navParams: NavParams,
     public api: Api,
     public http: Http) {
-    this.store = this.navParams.get("store");
+    this.storeID = this.navParams.get("storeID");
     this.dataResults = {
       PplAttend: 0,
       PplOnSpot: 0,
@@ -48,12 +48,12 @@ export class ActivityItemViewPage {
     this.activityItem.prepare = [];
     console.log(this.activityItem);
     // 获得指定门店指定活动的数据
-    this.api.get(`eventdatainfoes?StoreID=${this.store.ID}&EventID=${this.activityItem.id}`).subscribe((resp) => {
+    this.api.get(`eventdatainfoes?StoreID=${this.storeID}&EventID=${this.activityItem.id}`).subscribe((resp) => {
       let tempArray = [];
       // 如果是单个对象直接push到数组，如果是数组直接复制到数组
       Array.isArray(resp.json()) ? tempArray = resp.json() : tempArray.push(resp.json);
       tempArray = tempArray.filter((data) => {
-        return data.StoreID === this.store.ID && data.EventID === this.activityItem.id;
+        return data.StoreID === this.storeID && data.EventID === this.activityItem.id;
       });
       // 遍历累加
       tempArray.map((results) => {
@@ -70,7 +70,7 @@ export class ActivityItemViewPage {
     });
 
     // 获得指定门店指定活动的照片信息(包括：选手照片1，围观人群照片2，活动物料广告照片3，直播大v照片4，支持人照片5, 活动准备照片6)
-    this.http.get(`http://portal.gamepoch.com/geportal/gepls/getepibystoreevent?storeid=${this.store.ID}&eventid=${this.activityItem.id}`).subscribe(resp => {
+    this.http.get(`http://portal.gamepoch.com/geportal/gepls/getepibystoreevent?storeid=${this.storeID}&eventid=${this.activityItem.id}`).subscribe(resp => {
       console.log(JSON.parse(resp.json()));
       let tempArray = JSON.parse(resp.json()).map((data) => {
         delete data.Store;
@@ -114,7 +114,7 @@ export class ActivityItemViewPage {
   doOpenEditPage() {
     this.navCtrl.push(ActivityItemEditPage, {
       item: this.activityItem,
-      storeID: this.store.ID,
+      storeID: this.storeID,
       EventID: this.activityItem.id,
       EventDate: this.activityItem.date
     });
