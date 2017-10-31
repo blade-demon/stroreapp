@@ -9,7 +9,7 @@ import { StorageProvider } from '../../providers/storage/storage';
   templateUrl: 'sales-item.html',
 })
 export class SalesItemPage {
-  store: any;
+  storeID: any;
   salesItem: any;
   salesArray: any;
   constructor(public navCtrl: NavController,
@@ -23,16 +23,18 @@ export class SalesItemPage {
   }
 
   ionViewWillEnter() {
-    this.storageProvider.getStoreInfo().then(val => {
-      this.store = val;
-      console.log(this.store.ID);
+    this.storageProvider.getStoreID().then(val => {
+      this.storeID = val;
+      if(!this.salesItem.ID) {
+        this.navCtrl.pop();
+      }
 
       console.log("当前商品信息是：", this.salesItem);
-      this.api.get("saledatainfoes", { StoreID: this.store.ID, ProductId: this.salesItem.ID }).subscribe(data => {
+      this.api.get("saledatainfoes", { StoreID: this.storeID, ProductId: this.salesItem.ID }).subscribe(data => {
         let salesInfo = data.json();
         console.log("商品的信息：", salesInfo);
         let tempArray = salesInfo.filter(item => {
-          return item.StoreID == this.store.ID && item.Product.ID == this.salesItem.ID;
+          return item.StoreID == this.storeID && item.Product.ID == this.salesItem.ID;
         });
         this.salesArray = tempArray.map(function (sales) {
           return { date: sales.SaleDate, sold: sales.SaleAmount, purchase: sales.PurchaseAmount, inStock: sales.InStockAmount }
@@ -49,14 +51,16 @@ export class SalesItemPage {
   doCreateNewItem() {
     let addModal = this.modalCtrl.create(SalesItemRecordCreatePage, { item: this.salesItem });
     addModal.onDidDismiss(item => {
-      let saleInfo = {
-        date: String(item.SaleDate),
-        inStock: item.InStockAmount,
-        purchase: item.PurchaseAmount,
-        sold: item.SaleAmount
-      };
-      console.log(saleInfo);
-      this.salesArray.push(saleInfo);
+      if(item) {
+        let saleInfo = {
+          date: String(item.SaleDate),
+          inStock: item.InStockAmount,
+          purchase: item.PurchaseAmount,
+          sold: item.SaleAmount
+        };
+        console.log(saleInfo);
+        this.salesArray.push(saleInfo);
+      }
     });
     addModal.present();
   }

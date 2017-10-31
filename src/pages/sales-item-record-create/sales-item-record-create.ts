@@ -14,7 +14,7 @@ export class SalesItemRecordCreatePage {
   itemInfo: any;
   newRecord: { date, sold, purchase, purchasePrice, inStock };
   private form: FormGroup;
-  store: any;
+  storeID: any;
 
   constructor(public navCtrl: NavController,
     public loaderCtrl: LoadingController,
@@ -35,9 +35,9 @@ export class SalesItemRecordCreatePage {
 
   ionViewWillEnter() {
     this.itemInfo = this.navParams.get("item");
-    this.storageProvider.getStoreInfo().then(val => {
-      this.store = val;
-      console.log("storeId:", this.store.ID);
+    this.storageProvider.getStoreID().then(val => {
+      this.storeID = val;
+      console.log("storeId:", this.storeID);
     });
     // console.log(this.itemInfo.ID);
   }
@@ -49,7 +49,7 @@ export class SalesItemRecordCreatePage {
   createNewRecord() {
     console.log("创建", this.form.value);
     let data = {
-      "StoreID": this.store.ID,
+      "StoreID": this.storeID,
       "SaleDate": this.form.value.date,
       "ProductID": this.itemInfo.ID,
       "InStockAmount": this.form.value.inStock,

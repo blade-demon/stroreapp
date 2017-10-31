@@ -12,17 +12,14 @@ export class StorageProvider {
   }
 
   // 存储店铺信息
-  saveStoreInfo(data) {
-    this.storage.set('storeInfo', JSON.stringify(data));
+  saveStoreID(data) {
+    this.storage.set('storeID', data);
   }
 
   // 获取店铺信息
-  getStoreInfo() {
+  getStoreID() {
     return new Promise(resolve => {
-      this.storage.get('storeInfo').then((val) => {
-        // console.log("获得的店铺信息：", val);
-        resolve(JSON.parse(val));
-      });
+      this.storage.get('storeID').then(val => resolve(val));
     });
   }
 

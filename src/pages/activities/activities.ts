@@ -10,7 +10,7 @@ import { StorageProvider } from '../../providers/storage/storage';
 })
 export class ActivitiesPage {
   activities: any;
-  store: any;
+  storeID: any;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -140,14 +140,14 @@ export class ActivitiesPage {
     });
 
     // 获取店铺信息
-    this.storageProvider.getStoreInfo().then((val) => {
+    this.storageProvider.getStoreID().then((val) => {
       console.log("获取店铺信息：", val);
-      this.store = val;
+      this.storeID = val;
     });
   }
 
   doViewDetail(item) {
     // console.log(item);
-    this.navCtrl.push(ActivityItemViewPage, { item: item, store: this.store });
+    this.navCtrl.push(ActivityItemViewPage, { item: item, storeID: this.storeID });
   }
 }

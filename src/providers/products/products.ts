@@ -8,9 +8,7 @@ import { Api } from '../api/api';
 @Injectable()
 export class ProductsProvider {
 
-  constructor(public http: Http, public api: Api) {
-    // console.log('Hello ProductsProvider Provider');
-  }
+  constructor(public http: Http, public api: Api) {}
 
   query(params?: any) {
     return this.api.get('events', params)

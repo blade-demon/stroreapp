@@ -15,15 +15,15 @@ export class AccountPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public storageProvider: StorageProvider) {}
 
   ionViewWillEnter() {
-    this.storageProvider.getStoreInfo().then((data) => {
-      // console.log(data);
-      this.storeInfo = data;
-    });
+    // this.storageProvider.getStoreInfo().then((data) => {
+    //   // console.log(data);
+    //   this.storeInfo = data;
+    // });
 
-    this.storageProvider.getEmployeeInfo().then(data => {
-      this.employeeInfo = data;
-      console.log(this.employeeInfo);
-    })
+    // this.storageProvider.getEmployeeInfo().then(data => {
+    //   this.employeeInfo = data;
+    //   console.log(this.employeeInfo);
+    // })
   }
 
   doGoMainPage() {
