@@ -38,18 +38,20 @@ export class HomePage {
         // 获得产品列表
         this.api.get("products").subscribe(products => {
           this.productsList = products.json().map(item => {
-            return { "ProductID": item.ProductID, "TotalSalesAmount": 0 };
+            return { "ProductID": item.ID, "ProductName": item.ProductName ,"TotalSalesAmount": 0 };
           });
           // 处理产品信息
           let temp = _
             .chain(resp.json())
             .filter(_.iteratee({StoreID: this.storeID}))
             .map(item => {
-              console.log(item);
               delete item.Store;
+              let products = this.productsList.filter(product => item.ProductID == product.ProductID);
+              console.log(products[0]);
               return {
                 ID: item.ID,
                 InStockAmount: item.InStockAmount,
+                ProductName: products[0].ProductName,
                 ProductID: item.ProductID,
                 PurchaseAmount: item.PurchaseAmount,
                 SaleAmount: item.SaleAmount,
