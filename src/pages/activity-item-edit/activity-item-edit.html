@@ -18,7 +18,9 @@
         <ion-list *ngSwitchCase="'prepare'">
             <ion-card>
                 <ion-item>
-                    <ion-label><small>门头照片</small></ion-label>
+                    <ion-label>
+                        <small>门头照片</small>
+                    </ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
@@ -29,17 +31,20 @@
                             </ion-card>
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - storePics.length > 0" style="text-align:center; padding: 0 16px">
-                            <button ion-button icon-left clear (click)="presentActionSheet('storePics')">
-                                <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                                选择照片
-                              </button>
+                            <input type="file" #storeFileInput style="visibility: hidden; height: 0px" multiple="multiple" name="files[]" (change)="processWebImage('storePics', $event)" />
+                            <button ion-button icon-left clear (click)="getPicture('storePics')">
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </ion-card>
             <ion-card>
                 <ion-item>
-                    <ion-label><small>货架照片</small></ion-label>
+                    <ion-label>
+                        <small>货架照片</small>
+                    </ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
@@ -51,16 +56,18 @@
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - shelvesPics.length > 0" style="text-align:center; padding: 0 16px">
                             <button ion-button icon-left clear (click)="presentActionSheet('shelvesPics')">
-                                <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                                选择照片
-                              </button>
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </ion-card>
             <ion-card>
                 <ion-item>
-                    <ion-label> <small>店面陈列展示照片</small></ion-label>
+                    <ion-label>
+                        <small>店面陈列展示照片</small>
+                    </ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
@@ -72,16 +79,18 @@
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center; padding: 0 16px">
                             <button ion-button icon-left clear (click)="presentActionSheet('storeShowPics')">
-                                <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                              选择照片
-                              </button>
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </ion-card>
             <ion-card>
                 <ion-item>
-                    <ion-label> <small>物料尺寸对比照片</small></ion-label>
+                    <ion-label>
+                        <small>物料尺寸对比照片</small>
+                    </ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
@@ -93,9 +102,9 @@
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - compareSizePics.length > 0" style="text-align:center; padding: 0 16px">
                             <button ion-button icon-left clear (click)="presentActionSheet('compareSizePics')">
-                              <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                            选择照片
-                            </button>
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -103,29 +112,37 @@
             <ion-row style="margin: 20px 0px">
                 <ion-col col-12 style="padding: 0 16px;">
                     <button ion-button color="primary" full (click)="doSubmitPrepare()" [disabled]="!buttonPrepareState()">
-                        <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
-                        &nbsp;&nbsp;提交审核</button>
+            <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
+            &nbsp;&nbsp;提交审核</button>
                 </ion-col>
             </ion-row>
         </ion-list>
 
         <ion-list *ngSwitchCase="'result'">
             <ion-item>
-                <ion-label><small>参与人数</small></ion-label>
+                <ion-label>
+                    <small>参与人数</small>
+                </ion-label>
                 <ion-input dir="rtl" type="number" placeholder="填写数字" min=1 [(ngModel)]="attend"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label><small>到场人数</small></ion-label>
+                <ion-label>
+                    <small>到场人数</small>
+                </ion-label>
                 <ion-input dir="rtl" type="number" placeholder="填写数字" min=1 [(ngModel)]="join"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label><small>直播人数</small></ion-label>
+                <ion-label>
+                    <small>直播人数</small>
+                </ion-label>
                 <ion-input dir="rtl" type="number" placeholder="填写数字" min=1 [(ngModel)]="live"></ion-input>
             </ion-item>
 
             <ion-card>
                 <ion-item>
-                    <ion-label><small>选手照片</small></ion-label>
+                    <ion-label>
+                        <small>选手照片</small>
+                    </ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
@@ -136,17 +153,23 @@
                             </ion-card>
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - playersPics.length" style="text-align:center">
-                            <button ion-button icon-left clear (click)="presentActionSheet('playersPics')">
-                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                            选择照片
-                      </button>
+                            <input type="file" #playersImageInput ion-button icon-left clear style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
+                            <ion-card class="profile-image-wrapper" (click)="getPicture()">
+                                <div class="profile-image-placeholder" *ngIf="!showImagePlaceHolder">
+                                    <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                                </div>
+                                <!-- <img *ngIf="matchId" src={{resultImage}} /> -->
+                                <!-- <div class="profile-image" [style.backgroundImage]="getProfileImageStyle()" *ngIf="this.match.results"></div> -->
+                            </ion-card>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </ion-card>
             <ion-card>
                 <ion-item>
-                    <ion-label><small>围观人照片</small></ion-label>
+                    <ion-label>
+                        <small>围观人照片</small>
+                    </ion-label>
                 </ion-item>
                 <ion-grid>
                     <ion-row>
@@ -158,9 +181,9 @@
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - spectatorPics.length" style="text-align:center">
                             <button ion-button icon-left clear (click)="presentActionSheet('spectatorPics')">
-                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                            选择照片
-                        </button>
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -179,9 +202,9 @@
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - advertisePics.length" style="text-align:center">
                             <button ion-button icon-left clear (click)="presentActionSheet('advertisePics')">
-                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                            选择照片
-                        </button>
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -200,9 +223,9 @@
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - liverPics.length" style="text-align:center">
                             <button ion-button icon-left clear (click)="presentActionSheet('liverPics')">
-                            <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                            选择照片
-                        </button>
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -221,9 +244,9 @@
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - supporterPics.length" style="text-align:center">
                             <button ion-button icon-left clear (click)="presentActionSheet('supporterPics')">
-                          <ion-icon ios="ios-images" md="md-images"></ion-icon>
-                          选择照片
-                        </button>
+                <ion-icon ios="ios-images" md="md-images"></ion-icon>
+                选择照片
+              </button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -232,8 +255,8 @@
                 <ion-row>
                     <ion-col col-12>
                         <button ion-button color="primary" full (click)="doSubmitResult()" [disabled]="!buttonResultState()">
-                          <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon>
-                      &nbsp;&nbsp;提交信息</button>
+              <ion-icon ios="ios-paper-plane" md="md-paper-plane"></ion-icon>
+              &nbsp;&nbsp;提交信息</button>
                     </ion-col>
                 </ion-row>
             </ion-grid>

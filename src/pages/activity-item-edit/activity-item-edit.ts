@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController, ActionSheetController, LoadingController, ToastController } from 'ionic-angular';
 import { ImgServiceProvider } from "../../providers/img-service/img-service";
 import { StorageProvider} from "../../providers/storage/storage";
@@ -14,6 +14,8 @@ declare const Buffer;
 })
 
 export class ActivityItemEditPage {
+  @ViewChild('storeFileInput') storeFileInput:ElementRef;
+  @ViewChild('fileInput') playersImageInput;
   public blobStorageService: any;
   private employeeInfo:any;
 
@@ -98,7 +100,7 @@ export class ActivityItemEditPage {
     console.log("进入设置界面");
     this.storageProvider.getEmployeeInfo().then(data => {
       this.employeeInfo = data;
-      console.log(this.employeeInfo.Name);
+      // console.log(this.employeeInfo);
     })
   }
 
@@ -148,6 +150,74 @@ export class ActivityItemEditPage {
     }, (err) => {
       // this.showOpenCameraFailedAlert();
     });
+  }
+
+  // 获取照片
+  getPicture(imageArray) {
+    this.storeFileInput.nativeElement.click();
+  }
+
+  // 处理选中的图片
+  processWebImage(imageArray, event) {
+    let reader = new FileReader();
+    reader.onload = (readerEvent) => {
+      let imageData = (readerEvent.target as any).result;
+      this.addImageFilesIntoArray(imageArray, imageData);
+    };
+    if (event.target.files[0]) {
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
+  // 根据照片类型放入到指定的数组中去
+  addImageFilesIntoArray(imageArray, imageData) {
+      switch (imageArray) {
+        case "storePics":
+          this.storePics.push(imageData);
+          // this.storePics = this.storePics.concat(newImageFilesArray);
+          // this.storePics = this.storePics.reverse().slice(0, 2);
+          break;
+        case "shelvesPics":
+          this.shelvesPics.push(imageData);
+          // this.shelvesPics = this.shelvesPics.concat(newImageFilesArray);
+          // this.shelvesPics = this.shelvesPics.reverse().slice(0, 2);
+          break;
+        case "storeShowPics":
+          this.storeShowPics.push(imageData);
+          // this.storeShowPics = this.storeShowPics.concat(newImageFilesArray);
+          // this.storeShowPics = this.storeShowPics.reverse().slice(0, 2);
+          break;
+        case "compareSizePics":
+          this.compareSizePics.push(imageData);
+          // this.compareSizePics = this.compareSizePics.concat(newImageFilesArray);
+          // this.compareSizePics = this.compareSizePics.reverse().slice(0, 2);
+          break;
+        case "playersPics":
+          this.playersPics.push(imageData);
+          // this.playersPics = this.playersPics.concat(newImageFilesArray);
+          // this.playersPics = this.playersPics.reverse().slice(0, 2);
+          break;
+        case "spectatorPics":
+          this.spectatorPics.push(imageData);
+          // this.spectatorPics = this.spectatorPics.concat(newImageFilesArray);
+          // this.spectatorPics = this.spectatorPics.reverse().slice(0, 2);
+          break;
+        case "advertisePics":
+          this.advertisePics.push(imageData);
+          // this.advertisePics = this.advertisePics.concat(newImageFilesArray);
+          // this.advertisePics = this.advertisePics.reverse().slice(0, 2);
+          break;
+        case "liverPics":
+          this.liverPics.push(imageData);
+          // this.liverPics = this.liverPics.concat(newImageFilesArray);
+          // this.liverPics = this.liverPics.reverse().slice(0, 2);
+          break;
+        case "supporterPics":
+          this.supporterPics.push(imageData);
+          // this.supporterPics = this.supporterPics.concat(newImageFilesArray);
+          // this.supporterPics = this.supporterPics.reverse().slice(0, 2);
+          break;
+      }
   }
 
   // 从相册获取照片

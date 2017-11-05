@@ -47,7 +47,8 @@ export class LoginPage {
           loader.dismiss();
         }
         // 保存管理员登录信息
-        // this.storageProvider.saveEmployeeInfo(this.employee);
+        this.storageProvider.saveEmployeeInfo({ "Name": this.account.username });
+        console.log('登录的雇员是：', this.account.username);
         // 设置账户状态为已登录
         // this.storageProvider.changeLoginState(true);
 
