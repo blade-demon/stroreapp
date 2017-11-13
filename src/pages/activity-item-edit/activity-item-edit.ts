@@ -17,7 +17,14 @@ declare const Buffer;
 export class ActivityItemEditPage {
   @ViewChild('storePicsFileInput') storePicsFileInput:ElementRef;
   @ViewChild('storeShowPicsFileInput') storeShowPicsFileInput:ElementRef;
-  @ViewChild('shelvesPicsInput') shelvesPicsInput:ElementRef;
+  @ViewChild('shelvesPicsFileInput') shelvesPicsFileInput:ElementRef;
+  @ViewChild('compareSizePicsFileInput') compareSizePicsFileInput:ElementRef;
+
+  @ViewChild('playersPicsFileInput') playersPicsFileInput:ElementRef;
+  @ViewChild('advertisePicsFileInput') advertisePicsFileInput:ElementRef;
+  @ViewChild('spectatorPicsFileInput') spectatorPicsFileInput:ElementRef;
+  @ViewChild('liverPicsFileInput') liverPicsFileInput:ElementRef;
+  @ViewChild('supportPicsFileInput') supportPicsFileInput:ElementRef;
   public blobStorageService: any;
   private employeeInfo:any;
 
@@ -155,8 +162,40 @@ export class ActivityItemEditPage {
   }
 
   // 获取照片
-  getPicture(imageArray) {
-    this.storePicsFileInput.nativeElement.click();
+  triggerFileInputClick(imageArray) {
+    switch (imageArray) {
+      // 门头
+      case "storePics":
+        this.storePicsFileInput.nativeElement.click();
+        break;
+      // 货架
+      case "shelvesPics":
+        this.shelvesPicsFileInput.nativeElement.click();
+        break;
+      // 展示物
+      case "storeShowPics":
+        this.storeShowPicsFileInput.nativeElement.click();
+        break;
+      // 物料尺寸对比
+      case "compareSizePics":
+        this.compareSizePicsFileInput.nativeElement.click();
+        break;
+      case "playersPics":
+        this.playersPicsFileInput.nativeElement.click();
+        break;
+      case "spectatorPics":
+        this.spectatorPicsFileInput.nativeElement.click();
+        break;
+      case "advertisePics":
+        this.advertisePicsFileInput.nativeElement.click();
+        break;
+      case "liverPics":
+        this.liverPicsFileInput.nativeElement.click();
+        break;
+      case "supporterPics":
+        this.supportPicsFileInput.nativeElement.click();
+        break;
+    }
   }
 
   // 处理选中的图片
