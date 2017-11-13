@@ -4,6 +4,7 @@ import { ImgServiceProvider } from "../../providers/img-service/img-service";
 import { StorageProvider} from "../../providers/storage/storage";
 import { Api } from '../../providers/api/api';
 import * as randomize from 'randomatic';
+import { Element } from '@angular/compiler';
 declare var AzureStorage: any;
 declare const Buffer;
 
@@ -14,8 +15,9 @@ declare const Buffer;
 })
 
 export class ActivityItemEditPage {
-  @ViewChild('storeFileInput') storeFileInput:ElementRef;
-  @ViewChild('fileInput') playersImageInput;
+  @ViewChild('storePicsFileInput') storePicsFileInput:ElementRef;
+  @ViewChild('storeShowPicsFileInput') storeShowPicsFileInput:ElementRef;
+  @ViewChild('shelvesPicsInput') shelvesPicsInput:ElementRef;
   public blobStorageService: any;
   private employeeInfo:any;
 
@@ -154,7 +156,7 @@ export class ActivityItemEditPage {
 
   // 获取照片
   getPicture(imageArray) {
-    this.storeFileInput.nativeElement.click();
+    this.storePicsFileInput.nativeElement.click();
   }
 
   // 处理选中的图片
@@ -321,44 +323,6 @@ export class ActivityItemEditPage {
     confirm.present();
   }
 
-  // 选择相册或者相机
-  presentActionSheet(imageArray) {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: '选择',
-      buttons: [
-        {
-          text: '打开相机',
-          role: 'destructive',
-          handler: () => {
-            console.log('打开相机');
-            this.getImageFromCamera(imageArray);
-          }
-        }, {
-          text: '打开相册',
-          handler: () => {
-            console.log('打开本地文件');
-            this.getImageFromImgPicker(imageArray);
-          }
-        }, {
-          text: '取消',
-          handler: () => {
-            console.log('取消');
-          }
-        }
-      ]
-    });
-    actionSheet.present();
-  }
-
-  // 打开相机失败提示
-  showOpenCameraFailedAlert() {
-    let alert = this.alertCtrl.create({
-      subTitle: '没有找到相机',
-      buttons: ['确定']
-    });
-    alert.present();
-  }
-
   //上传准备照片
   doSubmitPrepare() {
     const loading = this.loadingCtrl.create({
@@ -378,7 +342,7 @@ export class ActivityItemEditPage {
     // this.shelvesPicsSaved = savedArray.slice(this.storePics.length, this.storePics.length + this.shelvesPics.length);
     // this.storeShowPicsSaved = savedArray.slice(this.storePics.length + this.shelvesPics.length, this.storePics.length + this.shelvesPics.length + this.storeShowPics.length);
 
-    this.uploadImg(fileArray, savedArray, (err, result) => {
+    this.doUploadImg(fileArray, savedArray, (err, result) => {
       this.uploadImagesURLToServer(savedArray, 6).then((value) => {
         loading.dismiss().then(() => {
           this.viewCtrl.dismiss();
@@ -405,7 +369,7 @@ export class ActivityItemEditPage {
       savedArray.push(this.employeeInfo.Name + '-' + randomize('Aa0', 20));
     }
 
-    this.uploadImg(fileArray, savedArray, (err, result) => {
+    this.doUploadImg(fileArray, savedArray, (err, result) => {
       this.uploadImagesURLToServer(savedArray.slice(0, this.playersPics.length), 1).then(() => {
         this.uploadImagesURLToServer(savedArray.slice(this.playersPics.length, this.playersPics.length + this.spectatorPics.length), 2).then(() => {
           this.uploadImagesURLToServer(savedArray.slice(this.playersPics.length + this.spectatorPics.length, this.playersPics.length + this.spectatorPics.length + this.advertisePics.length), 3).then(() => {
@@ -445,7 +409,7 @@ export class ActivityItemEditPage {
   }
 
   // 上传图片
-  uploadImg(files: any[], savedArray, callback) {
+  doUploadImg(files: any[], savedArray, callback) {
     if (!files.length) {
       return;
     }
@@ -453,7 +417,6 @@ export class ActivityItemEditPage {
     // 创建容器
     this.createContainer("images", (error, result) => {
       if (!error) {
-        // alert("files:" + JSON.stringify(files));
         // 上传Blob
         this.uploadFiles("images", files, savedArray, function (error, result) {
           if (!error) {
@@ -489,15 +452,11 @@ export class ActivityItemEditPage {
     var blobService = this.blobStorageService;
 
     files.forEach(function (file, index) {
-      // var blobName = file.replace(/^.*[\\\/]/, '');
       var fileInfo = [];
       fileInfo = file.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-      // console.log(fileInfo);
       var type = fileInfo[1];
-      //alert(this.employeeInfo.Name);
       var blobName = savedArray[index] + ".jpeg";
       var fileBuffer = new Buffer(fileInfo[2], "base64");
-      console.log(fileBuffer);
       blobService.createBlockBlobFromText(containerName, blobName, fileBuffer, { contentType: type }, function (error, result, response) {
         finished++;
         if (error) {
@@ -511,6 +470,7 @@ export class ActivityItemEditPage {
     });
   }
 
+  // 上传图片到服务器
   uploadImagesURLToServer(imageArray, photoType) {
     return new Promise((resolve, reject) => {
       imageArray.forEach(image => {

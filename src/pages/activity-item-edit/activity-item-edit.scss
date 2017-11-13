@@ -6,9 +6,13 @@ page-activity-item-edit {
         transform: rotate(45deg);
     }
     .deleteIcon:before {
-        font-size: 30px !important;
+        font-size: 20px !important;
     }
     .releative {
         position: relative
+    }
+    .imageInput {
+        visibility: hidden;
+        height: 0px;
     }
 }

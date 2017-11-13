@@ -38,12 +38,12 @@ export class HomePage {
         // 获得产品列表
         this.api.get("products").subscribe(products => {
           this.productsList = products.json().map(item => {
-            return { "ProductID": item.ID, "ProductName": item.ProductName ,"TotalSalesAmount": 0 };
+            return { "ProductID": item.ID, "ProductName": item.ProductName, "TotalSalesAmount": 0 };
           });
           // 处理产品信息
           let temp = _
             .chain(resp.json())
-            .filter(_.iteratee({StoreID: this.storeID}))
+            .filter(_.iteratee({ StoreID: this.storeID }))
             .map(item => {
               delete item.Store;
               let products = this.productsList.filter(product => item.ProductID == product.ProductID);
@@ -71,10 +71,16 @@ export class HomePage {
             dataArray.push({ "ProductID": id, "TotalSalesAmount": sum });
           }
           // console.log("商品销售列表：", dataArray);
-          console.log("商品列表：", this.productsList);
+          // console.log("商品列表：", this.productsList);
+          var productItems = [];
+          for (let i = 0; i < dataArray.length; i++) {
+            let productItem:any = this.productsList.filter(item => dataArray[i].ProductID === item.ProductID);
+            productItem[0].TotalSalesAmount =  dataArray[i].TotalSalesAmount;
+            productItems.push(productItem[0]);
+          }
+          // console.log(productItems);
           // 过滤产品信息，确保所有产品的数据都列出来，即使产品销售数据为0
-          this.products = _.unionBy(dataArray, this.productsList, "ProductID");
-          console.log(this.products);
+          this.products = _.unionBy(productItems, this.productsList, "ProductID");
           loader.dismiss();
         });
       }, error => { });

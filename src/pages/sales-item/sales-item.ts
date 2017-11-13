@@ -29,12 +29,11 @@ export class SalesItemPage {
         this.navCtrl.pop();
       }
 
-      console.log("当前商品信息是：", this.salesItem);
+      // console.log("当前商品信息是：", this.salesItem);
       this.api.get("saledatainfoes", { StoreID: this.storeID, ProductId: this.salesItem.ID }).subscribe(data => {
         let salesInfo = data.json();
-        console.log("商品的信息：", salesInfo);
         let tempArray = salesInfo.filter(item => {
-          return item.StoreID == this.storeID && item.Product.ID == this.salesItem.ID;
+          return item.StoreID == this.storeID && item.ProductID == this.salesItem.ID;
         });
         this.salesArray = tempArray.map(function (sales) {
           return { date: sales.SaleDate, sold: sales.SaleAmount, purchase: sales.PurchaseAmount, inStock: sales.InStockAmount }

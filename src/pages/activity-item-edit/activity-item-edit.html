@@ -31,7 +31,7 @@
                             </ion-card>
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - storePics.length > 0" style="text-align:center; padding: 0 16px">
-                            <input type="file" #storeFileInput style="visibility: hidden; height: 0px" multiple="multiple" name="files[]" (change)="processWebImage('storePics', $event)" />
+                            <input class="imageInput" type="file" #storePicsFileInput multiple="multiple" (change)="processWebImage('storePics', $event)" />
                             <button ion-button icon-left clear (click)="getPicture('storePics')">
                 <ion-icon ios="ios-images" md="md-images"></ion-icon>
                 选择照片
@@ -55,7 +55,8 @@
                             </ion-card>
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - shelvesPics.length > 0" style="text-align:center; padding: 0 16px">
-                            <button ion-button icon-left clear (click)="presentActionSheet('shelvesPics')">
+                            <input class="imageInput" type="file" #shelvesPicsFileInput (change)="processWebImage('shelvesPics', $event)">
+                            <button ion-button icon-left clear (click)="getPicture('shelvesPics')">
                 <ion-icon ios="ios-images" md="md-images"></ion-icon>
                 选择照片
               </button>
@@ -78,7 +79,8 @@
                             </ion-card>
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - storeShowPics.length > 0" style="text-align:center; padding: 0 16px">
-                            <button ion-button icon-left clear (click)="presentActionSheet('storeShowPics')">
+                            <input class="imageInput" type="file" #storeShowPicsFileInput (change)="processWebImage('storeShowPics', $event)">
+                            <button ion-button icon-left clear (click)="getPicture('storeShowPics')">
                 <ion-icon ios="ios-images" md="md-images"></ion-icon>
                 选择照片
               </button>
@@ -101,7 +103,8 @@
                             </ion-card>
                         </ion-col>
                         <ion-col col-12 *ngIf="2 - compareSizePics.length > 0" style="text-align:center; padding: 0 16px">
-                            <button ion-button icon-left clear (click)="presentActionSheet('compareSizePics')">
+                            <input class="imageInput" type="file" (change)="processWebImage('compareSizePics', $event)">
+                            <button ion-button icon-left clear (click)="getPicture('compareSizePics')">
                 <ion-icon ios="ios-images" md="md-images"></ion-icon>
                 选择照片
               </button>
